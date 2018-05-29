@@ -15,18 +15,26 @@ public class Post {
       PUBLIC,
       FRIEDNS,
       CUSTOM
-   }
+   };
+   public enum PostType {
+      VIDEO,
+      IMAGE,
+      POST,
+      URL
+   };
    @Id
-   private String _postId;
-   private Date _postedDate;
-   private String _content;
-   private Long _upVote = 0;
-   private Long _downVote = 0;
-   private String postImagePath;
-   private String _userId;
-   private String _commentUrl;
-   private List<User> _reportedBy;
-   private Privacy _privacy;
+   private String postId;
+   private Date postedDate;
+   private String content;
+   private Long upVote = 0;
+   private Long downVote = 0;
+   private String imageUrl;
+   private String userId;
+   private String commentUrl;
+   private List<User> reportedBy;
+   private Privacy privacy;
+   private Location location;
+   private PostType postType;
    public Post(){
 
    }
