@@ -15,7 +15,7 @@ import static com.scent.feedservices.Util.Constants.*;
 public class PostRepositoryImpl extends AbstractRepository{
     @Autowired
     private PostRepository _postRepository;
-   
+
 
     @PostConstruct
     public void init() {
@@ -37,7 +37,6 @@ public class PostRepositoryImpl extends AbstractRepository{
         int postExpiryDayCount = getConfigServiceImpl().getPropertyValueAsInteger(GLOBAL_CONFIG, PROP_POST_EXPIRY_DAY);
         String expiryDate = DateUtil.addAdvanceDaysToGivenDate(paramMap.get(DATE), postExpiryDayCount, POST_TIME_PATTERN, TIMEZONE_UTC);
         String createdDate = DateUtil.formatDate(paramMap.get(DATE), POST_TIME_PATTERN, TIMEZONE_UTC);
-
         Post post = new Post();
         post.setUserId(paramMap.get(USER_ID));
         post.setContent(paramMap.get(CONTENT));

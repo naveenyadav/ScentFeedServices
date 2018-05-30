@@ -1,5 +1,8 @@
 package com.scent.feedservices.Util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,6 +11,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class DateUtil {
+    private static final Logger LOG = LogManager.getLogger(DateUtil.class);
     /**
      * no arg constructor
      */
@@ -24,7 +28,10 @@ public class DateUtil {
             Date date = sdfIn.parse(dateIn);
             dateOut = sdfOut.format(date);
         } catch (ParseException e) {
-
+            LoggerUtil.error(LOG,
+                    String.format("ParseException in formatDate for dateIn: %s, datePatternIn: %s, datePatternOut: %s",
+                            dateIn, datePatternIn, datePatternOut),
+                    e);
         }
 
         return dateOut;
@@ -56,8 +63,8 @@ public class DateUtil {
             cal.setTime(date);
             cal.add(Calendar.DATE, advanceNoOfDays);
         } catch (ParseException e) {
-//            LoggerUtil.error(LOG,
-//                    String.format("ParseException in addDaysToGivenDate for date string: [%s]", startDate), e);
+            LoggerUtil.error(LOG,
+                    String.format("ParseException in addDaysToGivenDate for date string: [%s]", startDate), e);
         }
         return formatter.format(cal.getTime());
     }

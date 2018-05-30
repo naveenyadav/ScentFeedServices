@@ -26,7 +26,18 @@ public class Constants {
     public static final String LOCATION_NAME = "locationName";
     public static final String USER_ID = "userId";
     public static final String POST_TYPE = "postType";
-
-
-
+    public static final String LOG_CONTROLLER = "CONTROLLER";
+    public static final String LOG_SERVICE = "SERVICE";
+    public static final String LOG_REPOSITORY = "REPOSITORY";
+    public static final String THREAD = "thread";
+    public static final String CLIENT_IP = "clientip";
+    public static final String EQUAL = "=";
+    public static final int TWO = 2;
+    public static final String COMMA = ",";
+    public static final String EMPTY = "";
+    public static final String NULL = "null";
+    public static final int INDEX_NOT_FOUND = -1;
+    public static final String WHITESPACE = " ";
+    public static final String DOMAIN = "domain";
+    public static final String URI = "uri";
 }
