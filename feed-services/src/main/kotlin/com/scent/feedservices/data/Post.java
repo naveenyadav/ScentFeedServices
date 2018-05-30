@@ -1,11 +1,12 @@
 package com.scent.feedservices.data;
 
 
+import org.json.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Date;
 import java.util.List;
+
+import static com.scent.feedservices.Util.Constants.POST_ID;
 
 
 @Document
@@ -162,7 +163,15 @@ public class Post {
       return flagToDelete;
    }
 
+
    public void setFlagToDelete(Boolean flagToDelete) {
       this.flagToDelete = flagToDelete;
+
+   }
+
+   public JSONObject toJSONObject(){
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put(POST_ID, postId);
+      jsonObject.put(POST_ID, postId);
    }
 }

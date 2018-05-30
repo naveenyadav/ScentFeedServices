@@ -26,6 +26,7 @@ public class Constants {
     public static final String LOCATION_NAME = "locationName";
     public static final String USER_ID = "userId";
     public static final String POST_TYPE = "postType";
+    //Logger Util
     public static final String LOG_CONTROLLER = "CONTROLLER";
     public static final String LOG_SERVICE = "SERVICE";
     public static final String LOG_REPOSITORY = "REPOSITORY";
@@ -40,4 +41,6 @@ public class Constants {
     public static final String WHITESPACE = " ";
     public static final String DOMAIN = "domain";
     public static final String URI = "uri";
+
+    public static final String POST_ID = "postId";
 }

@@ -1,5 +1,7 @@
 package com.scent.feedservices.repositories;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import com.scent.feedservices.Util.DateUtil;
 import com.scent.feedservices.data.*;
 
@@ -46,8 +48,10 @@ public class PostRepositoryImpl extends AbstractRepository{
         Location location = getUserLocation(paramMap);
         post.setLocation(location);
         _postRepository.save(post);
+
         return null;
     }
+
     private Location getUserLocation(Map<String, String> paramMap){
         Location location = new Location();
         location.setType(POINT);
