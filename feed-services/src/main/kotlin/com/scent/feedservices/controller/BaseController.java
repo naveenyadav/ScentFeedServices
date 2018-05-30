@@ -34,8 +34,8 @@ public class BaseController {
     }
 
     public ResponseData getReponseData(Map<String, String> queryParams){
-        RequestData requestData = this.getRequestData(httpServletRequest, queryParams);
-
+        //RequestData requestData = this.getRequestData(httpServletRequest, queryParams);
+        return null;
 
     }
 

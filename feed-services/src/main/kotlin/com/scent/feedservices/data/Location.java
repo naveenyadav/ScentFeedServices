@@ -25,10 +25,18 @@ public class Location {
         setLatitude(coordinates[1]);
     }
 
-    private void setLongitude(Long longitude) {
+    public void setLongitude(Long longitude) {
         this.coordinates[0] = longitude;
     }
-    private void setLatitude(Long latitude) {
+    public void setLatitude(Long latitude) {
         this.coordinates[1] = latitude;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

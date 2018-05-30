@@ -1,149 +1,62 @@
 package com.scent.feedservices.repositories;
 
-import com.scent.feedservices.data.Post;
-import org.reactivestreams.Publisher;
+import com.scent.feedservices.Util.DateUtil;
+import com.scent.feedservices.data.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Sort;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.stereotype.Component;
 
-public class PostRepositoryImpl{
-    private PostRepository _postRepository;
+import javax.annotation.PostConstruct;
+import java.util.Map;
+
+import static com.scent.feedservices.Util.Constants.*;
+
+@Component
+public class PostRepositoryImpl extends AbstractRepository{
     @Autowired
-    public PostRepositoryImpl(PostRepository postRepository){
-        _postRepository = postRepository;
+    private PostRepository _postRepository;
+   
 
+    @PostConstruct
+    public void init() {
+        String[] requiredFields = new String[]{CONTENT,
+                DATE,
+                TIMEZONE,
+                LATITUDE,
+                LONGITUDE,
+                LOCATION_NAME,
+                USER_ID,
+                POST_TYPE};
+        addToRequiredFieldList(requiredFields);
     }
 
-    @Override
-    public <S extends Post> Mono<S> insert(S entity) {
-        return null;
-    }
 
-    @Override
-    public <S extends Post> Flux<S> insert(Iterable<S> entities) {
-        return null;
-    }
+    public ResponseData createNewPost(RequestData requestData){
+        Map<String, String> paramMap =  requestData.getDataMap();
+        //POST expiry day
+        int postExpiryDayCount = getConfigServiceImpl().getPropertyValueAsInteger(GLOBAL_CONFIG, PROP_POST_EXPIRY_DAY);
+        String expiryDate = DateUtil.addAdvanceDaysToGivenDate(paramMap.get(DATE), postExpiryDayCount, POST_TIME_PATTERN, TIMEZONE_UTC);
+        String createdDate = DateUtil.formatDate(paramMap.get(DATE), POST_TIME_PATTERN, TIMEZONE_UTC);
 
-    @Override
-    public <S extends Post> Flux<S> insert(Publisher<S> entities) {
-        return null;
-    }
-
-    @Override
-    public <S extends Post> Mono<S> findOne(Example<S> example) {
-        return null;
-    }
-
-    @Override
-    public <S extends Post> Flux<S> findAll(Example<S> example) {
-        return null;
-    }
-
-    @Override
-    public <S extends Post> Flux<S> findAll(Example<S> example, Sort sort) {
-        return null;
-    }
-
-    @Override
-    public <S extends Post> Mono<Long> count(Example<S> example) {
-        return null;
-    }
-
-    @Override
-    public <S extends Post> Mono<Boolean> exists(Example<S> example) {
-        return null;
-    }
-
-    @Override
-    public Flux<Post> findAll(Sort sort) {
-        return null;
-    }
-
-    @Override
-    public  Mono<Post> save(String postId) {
         Post post = new Post();
-        _postRepository.save()
-    }
-
-    @Override
-    public <S extends Post> Flux<S> saveAll(Iterable<S> entities) {
+        post.setUserId(paramMap.get(USER_ID));
+        post.setContent(paramMap.get(CONTENT));
+        post.setCreatedDate(createdDate);
+        post.setTimeZone(paramMap.get(TIMEZONE));
+        post.setExpiryDate(expiryDate);
+        Location location = getUserLocation(paramMap);
+        post.setLocation(location);
+        _postRepository.save(post);
         return null;
     }
-
-    @Override
-    public <S extends Post> Flux<S> saveAll(Publisher<S> entityStream) {
-        return null;
+    private Location getUserLocation(Map<String, String> paramMap){
+        Location location = new Location();
+        location.setType(POINT);
+        location.setLatitude(Long.parseLong(paramMap.get(LATITUDE)));
+        location.setLongitude(Long.parseLong(paramMap.get(LONGITUDE)));
+        location.setName(paramMap.get(LOCATION_NAME));
+        return location;
     }
 
-    @Override
-    public Mono<Post> findById(String s) {
-        return null;
-    }
 
-    @Override
-    public Mono<Post> findById(Publisher<String> id) {
-        return null;
-    }
-
-    @Override
-    public Mono<Boolean> existsById(String s) {
-        return null;
-    }
-
-    @Override
-    public Mono<Boolean> existsById(Publisher<String> id) {
-        return null;
-    }
-
-    @Override
-    public Flux<Post> findAll() {
-        return null;
-    }
-
-    @Override
-    public Flux<Post> findAllById(Iterable<String> strings) {
-        return null;
-    }
-
-    @Override
-    public Flux<Post> findAllById(Publisher<String> idStream) {
-        return null;
-    }
-
-    @Override
-    public Mono<Long> count() {
-        return null;
-    }
-
-    @Override
-    public Mono<Void> deleteById(String s) {
-        return null;
-    }
-
-    @Override
-    public Mono<Void> deleteById(Publisher<String> id) {
-        return null;
-    }
-
-    @Override
-    public Mono<Void> delete(Post entity) {
-        return null;
-    }
-
-    @Override
-    public Mono<Void> deleteAll(Iterable<? extends Post> entities) {
-        return null;
-    }
-
-    @Override
-    public Mono<Void> deleteAll(Publisher<? extends Post> entityStream) {
-        return null;
-    }
-
-    @Override
-    public Mono<Void> deleteAll() {
-        return null;
-    }
 }

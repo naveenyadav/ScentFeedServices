@@ -7,6 +7,6 @@ import reactor.core.publisher.Mono;
 
 public interface PostRepository extends ReactiveMongoRepository<Post, String> {
     Mono<Post> findByPostId(String postId);
-    Flux<Post> findDistinctTopBy
-
+    @Override
+    <S extends Post> Mono<S> save(S s);
 }

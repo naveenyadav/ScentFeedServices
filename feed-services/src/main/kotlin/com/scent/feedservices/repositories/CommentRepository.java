@@ -1,9 +1,10 @@
 package com.scent.feedservices.repositories;
 
-import com.scent.feedservices.data.Post;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import reactor.core.publisher.Mono;
+import com.scent.feedservices.data.Comment;
 
-public interface CommentRepository extends ReactiveMongoRepository<Post, String> {
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+
+
+public interface CommentRepository extends ReactiveMongoRepository<Comment, String> {
 
 }
