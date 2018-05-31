@@ -1,12 +1,16 @@
 package com.scent.feedservices.controller;
 
 import com.scent.feedservices.EventHandler;
+import com.scent.feedservices.data.Employee;
 import com.scent.feedservices.data.EventData;
+import com.scent.feedservices.repositories.PostRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * This controller class file is used to handle following:
@@ -18,6 +22,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
+    private EmployeeRepository employeeRepository;
+    public CommentController(EmployeeRepository employeeRepository){
+        this.employeeRepository = employeeRepository;
+    }
     /**
      * This GET controller method is used to handle following.
      * Purpose:
@@ -26,8 +34,10 @@ public class CommentController {
      * @return
      */
     @RequestMapping(value = "/getComments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void getComments(@RequestParam Map<String, String> queryParams) {
+    public String getComments(@RequestParam Map<String, String> queryParams) {
         queryParams.put("", "");
+        employeeRepository.save( new Employee(UUID.randomUUID().toString(), "b", "2L")).subscribe(System.out::println);
+        return "Success";
 
     }
 

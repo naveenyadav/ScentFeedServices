@@ -1,35 +1,21 @@
-package com.scent.feedservices.repositories;
+package com.scent.feedservice.repositories;
 
-import com.fasterxml.jackson.databind.JsonNode;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.Mongo;
-import com.scent.feedservices.Util.DateUtil;
-import com.scent.feedservices.controller.EmployeeRepository;
-import com.scent.feedservices.data.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.scent.feedservice.data.Location;
+import com.scent.feedservice.data.RequestData;
+import com.scent.feedservice.data.ResponseData;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Stream;
 
-import static com.scent.feedservices.Util.Constants.*;
+import static com.scent.feedservice.Util.Constants.*;
+
 
 @Component
 public class PostRepositoryImpl extends AbstractRepository{
 
-    EmployeeRepository employeeRepository;
-    public PostRepositoryImpl(){}
-    @Autowired
-    public PostRepositoryImpl(EmployeeRepository employeeRepository){
-        this.employeeRepository = employeeRepository;
-    }
+
     @PostConstruct
     public void init() {
         String[] requiredFields = new String[]{CONTENT,

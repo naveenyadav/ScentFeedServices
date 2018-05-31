@@ -1,3 +1,5 @@
 post:
   expiry:
     dayCount: 1
+mongodb:
+  url: mongodb+srv://user_dev:SNmPcspDHLI3BwAs@clusterfeed-9uqny.mongodb.net/test?retryWrites=true
