@@ -2,7 +2,7 @@ post:
   expiry:
     dayCount: '1'
 mongodb:
-  url: mongodb://localhost:27017
-  path: mongodb+srv://user_dev:SNmPcspDHLI3BwAs@clusterfeed-9uqny.mongodb.net/test?retryWrites=true
+  url: mongodb+srv://user_dev:SNmPcspDHLI3BwAs@clusterfeed-9uqny.mongodb.net/test?retryWrites=true
+  path: mongodb://localhost:27017
   database:
     name: feedService2018
