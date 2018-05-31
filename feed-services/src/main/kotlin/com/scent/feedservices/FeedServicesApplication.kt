@@ -9,3 +9,5 @@ class FeedServicesApplication
 fun main(args: Array<String>) {
     runApplication<FeedServicesApplication>(*args)
 }
+
+

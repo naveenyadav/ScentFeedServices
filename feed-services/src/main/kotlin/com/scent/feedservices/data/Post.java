@@ -6,10 +6,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
-import static com.scent.feedservices.Util.Constants.POST_ID;
+import static com.scent.feedservices.Util.Constants.*;
 
 
-@Document
+@Document (collection = "post")
 public class Post {
    @Id
    private String postId;
@@ -30,7 +30,14 @@ public class Post {
    private PostType postType;
    private Boolean flagToDelete;
    public Post(){ }
-
+   public JSONObject toJSONObject(Post post){
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put(POST_ID, post.getPostId());
+      jsonObject.put(TIMEZONE, post.getTimeZone());
+      jsonObject.put(USER_ID, post.getUserId());
+      jsonObject.put(LOCATION, post.getLocation().getLocationJson());
+      return jsonObject;
+   }
    public String getPostId() {
       return postId;
    }
@@ -169,9 +176,5 @@ public class Post {
 
    }
 
-   public JSONObject toJSONObject(){
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put(POST_ID, postId);
-      jsonObject.put(POST_ID, postId);
-   }
+
 }

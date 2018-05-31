@@ -1,5 +1,10 @@
 package com.scent.feedservices.data;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.json.JSONObject;
+
+import static com.scent.feedservices.Util.Constants.*;
+
 public class Location {
     private String type;
     private Long[] coordinates;
@@ -38,5 +43,14 @@ public class Location {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public JSONObject getLocationJson(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(TYPE, type);
+        jsonObject.put(LONGITUDE, coordinates[0]);
+        jsonObject.put(LATITUDE, coordinates[1]);
+        jsonObject.put(LOCATION_NAME, name);
+        return jsonObject;
     }
 }
