@@ -13,20 +13,20 @@ import java.util.Map;
 import static com.scent.feedservice.Util.Constants.*;
 
 public class GetPostByID extends AbstractRepository{
-    private PostRepository postRepository;
-    public GetPostByID(PostRepository postRepository){
-        this.postRepository = postRepository;
-    }
-    @PostConstruct
-    public void init() {
-        String[] requiredFields = new String[]{POST_ID, USER_ID};
-        addToRequiredFieldList(requiredFields);
-    }
-
-    public ResponseData handleEvent(String eventName, EventData eventData){
-        final RequestData requestData = eventData.getRequestData();
-        Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
-        Mono<Post> post = postRepository.getPostByPostId(paramMap.get(POST_ID));
-
-    }
+//    private PostRepository postRepository;
+//    public GetPostByID(PostRepository postRepository){
+//        this.postRepository = postRepository;
+//    }
+//    @PostConstruct
+//    public void init() {
+//        String[] requiredFields = new String[]{POST_ID, USER_ID};
+//        addToRequiredFieldList(requiredFields);
+//    }
+//
+//    public ResponseData handleEvent(String eventName, EventData eventData){
+//        final RequestData requestData = eventData.getRequestData();
+//        Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
+//        Mono<Post> post = postRepository.getPostByPostId(paramMap.get(POST_ID));
+//
+//    }
 }

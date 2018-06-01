@@ -16,27 +16,5 @@ public class Comment {
         commentNode =  new LinkedList<>();
     }
 
-    public String getCommentId() {
-        return commentId;
-    }
 
-    public void setCommentId(String commentId) {
-        this.commentId = commentId;
-    }
-
-    public String getOwnerUserId() {
-        return ownerUserId;
-    }
-
-    public void setOwnerUserId(String ownerUserId) {
-        this.ownerUserId = ownerUserId;
-    }
-
-    public CommentNode getCommentNode() {
-        return commentNode;
-    }
-
-    public void setCommentNode(CommentNode commentNode) {
-        this.commentNode = commentNode;
-    }
 }

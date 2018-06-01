@@ -23,6 +23,7 @@ import static com.scent.feedservice.Util.Constants.*;
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
+
     private CreatePostHandler postRepositoryImpl;
     public CommentController(CreatePostHandler postRepositoryImpl){
         this.postRepositoryImpl = postRepositoryImpl;
@@ -37,21 +38,26 @@ public class CommentController {
     @RequestMapping(value = "/getComments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String getComments(@RequestParam Map<String, String> queryParams) {
         queryParams.put("", "");
+        queryParams.put(CONTENT, "content");
+        queryParams.put(DATE, "2018-05-30T19:35:22.346Z");
+        queryParams.put(TIMEZONE, "IST");
+        queryParams.put(LOCATION_NAME, "Taj Mahal");
+        queryParams.put(POST_TYPE, "IMAGE");
+        queryParams.put(USER_ID, "1");
         EventData eventData = new EventData();
 
-        RequestData requestData = new RequestData();
-        requestData.setParam(CONTENT, "content");
-        requestData.setParam(DATE, "2018-05-30T19:35:22.346Z");
-        requestData.setParam(TIMEZONE, "IST");
-        requestData.setParam(LATITUDE, "1");
-        requestData.setParam(LONGITUDE, "2");
-        requestData.setParam(LOCATION_NAME, "Taj Mahal");
-        requestData.setParam(POST_TYPE, "IMAGE");
-        requestData.setParam(USER_ID, "1");
+        RequestData requestData = getRequestData(queryParams);
+
         eventData.setRequestData(requestData);
-        postRepositoryImpl.createNewPost(eventData);
+        postRepositoryImpl.handleEvent(eventData);
 
         return "Success";
 
+    }
+
+    protected RequestData getRequestData(Map<String, String> queryParams) {
+        RequestData requestData = new RequestData();
+        requestData.setDataMap(queryParams);
+        return requestData;
     }
 }

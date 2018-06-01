@@ -1,6 +1,6 @@
 package com.scent.feedservice.data.feed;
 
-import com.scent.feedservice.data.feed.Coordinate;
+
 import org.json.JSONObject;
 
 import static com.scent.feedservice.Util.Constants.*;
@@ -8,10 +8,10 @@ import static com.scent.feedservice.Util.Constants.*;
 
 public class Location {
     private String type;
-    private Long[] coordinates;
+    private Double[] coordinates;
     private String name;
     public Location(){
-
+        coordinates = new Double[2];
     }
 
     public String getType() {
@@ -22,12 +22,21 @@ public class Location {
         this.type = type;
     }
 
-    public Coordinate getCoordinates() {
+    public Double[] getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(Coordinate coordinates) {
-        this.coordinates = coordinates;
+    public void setCoordinates(Double[] coordinates) {
+        setLongitude(coordinates[0]);
+        setLatitude(coordinates[1]);
+    }
+
+    public void setLongitude(Double longitude) {
+        this.coordinates[0] = longitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.coordinates[1] = latitude;
     }
 
     public String getName() {
@@ -44,4 +53,6 @@ public class Location {
         jsonObject.put(LOCATION_NAME, name);
         return jsonObject;
     }
+
+
 }

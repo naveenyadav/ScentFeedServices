@@ -96,7 +96,7 @@ public class AbstractRepository {
                                           Object serviceResponse) {
         // Set response data.
         ResponseData responseData = eventData.getResponseData();
-        responseData.setData(eventName, serviceResponse);
+        //responseData.setData(eventName, serviceResponse);
         return responseData;
     }
 

@@ -1,13 +1,14 @@
 package com.scent.feedservice.repositories;
 
 
+import com.scent.feedservice.Util.Constants;
 import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.*;
 import com.scent.feedservice.data.feed.Coordinate;
 import com.scent.feedservice.data.feed.Location;
 import com.scent.feedservice.data.feed.Post;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
+
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
@@ -19,9 +20,9 @@ import static com.scent.feedservice.Util.Constants.*;
 @Component
 public class CreatePostHandler extends AbstractRepository{
 
-    private PostRepository employeeRepository;
-    public CreatePostHandler(PostRepository employeeRepository){
-        this.employeeRepository = employeeRepository;
+    private PostRepository postRepository;
+    public CreatePostHandler(PostRepository postRepository){
+        this.postRepository = postRepository;
     }
 
     @PostConstruct
@@ -38,11 +39,17 @@ public class CreatePostHandler extends AbstractRepository{
     }
 
 
-    public ResponseData handleEvent(String eventName, EventData eventData){
+    public ResponseData handleEvent(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
-        Post post = getPostbody(paramMap);
-        employeeRepository.save(post);
+        //Post post = getPostbody(paramMap);
+        //postRepository.save(post).subscribe(System.out::println);
+        postRepository.getPostByPostId(paramMap.get(POST_ID)).subscribe(System.out::println);
+        return null;
+    }
+
+    private Post updatePost(Map<String, String> paramMap){
+        //postRepository.getPostByPostId(paramMap.get(POST_ID)).subscribe(System.out::println);
         return null;
     }
 
@@ -66,21 +73,16 @@ public class CreatePostHandler extends AbstractRepository{
     private Location getUserLocation(Map<String, String> paramMap){
         Location location = new Location();
         location.setType(POINT);
-        location.setCoordinates(getCoordinates(paramMap));
+        location.setLatitude(Double.parseDouble(paramMap.get(LATITUDE)));
+        location.setLongitude(Double.parseDouble(paramMap.get(LONGITUDE)));
         location.setName(paramMap.get(LOCATION_NAME));
         return location;
     }
 
-    private Coordinate getCoordinates(Map<String, String> paramMap){
-        Coordinate coordinates = new Coordinate();
-        coordinates.setLatitude(Long.parseLong(paramMap.get(LATITUDE)));
-        coordinates.setLongitude(Long.parseLong(paramMap.get(LONGITUDE)));
-        return coordinates;
-    }
 
-    private boolean postExists(Map<String, String> paramMap){
 
-    }
+
+
 
 
 }
