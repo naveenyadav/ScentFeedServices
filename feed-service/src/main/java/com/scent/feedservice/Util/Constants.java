@@ -51,4 +51,7 @@ public class Constants {
     //Configuration properties
     public static final String MONGO_DB_PATH = "mongodb.path";
     public static final String MONGO_DB_NAME = "mongodb.database.name";
+
+    //Event Data
+    public static final String JSON_RESPONSE_FILTER = "jsonResponseFilter";
 }

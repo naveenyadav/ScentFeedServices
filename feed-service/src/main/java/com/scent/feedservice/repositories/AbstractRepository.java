@@ -2,6 +2,8 @@ package com.scent.feedservice.repositories;
 
 
 import com.scent.feedservice.Util.ConfigServiceImpl;
+import com.scent.feedservice.data.EventData;
+import com.scent.feedservice.data.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.UriTemplate;
 
@@ -9,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.scent.feedservice.Util.Constants.GLOBAL_CONFIG;
 
 public class AbstractRepository {
 
@@ -68,4 +72,32 @@ public class AbstractRepository {
         url = uriTemplate.expand(paramsMap).toString();
         return url;
     }
+
+    protected String getValueFromGlobalAsString(String key){
+        return configServiceImpl.getPropertyValueAsString(GLOBAL_CONFIG, key);
+    }
+    protected int getValueFromGlobalAsInteger(String key){
+        return configServiceImpl.getPropertyValueAsInteger(GLOBAL_CONFIG, key);
+    }
+
+    /**
+     * updates the ResponseData in given transactionData with the given
+     * serviceResponse.
+     *
+     * @param eventName
+     *            name of event with which serviceResponse to be set.
+     * @param transactionData
+     *            container of ResponseData
+     * @param serviceResponse
+     *            the response from rest service to be set in ResponseData
+     * @return updated ResponseData
+     */
+    protected ResponseData updateResponse(String eventName, EventData eventData,
+                                          Object serviceResponse) {
+        // Set response data.
+        ResponseData responseData = eventData.getResponseData();
+        responseData.setData(eventName, serviceResponse);
+        return responseData;
+    }
+
 }
