@@ -39,7 +39,7 @@ public class CommentController {
     public String getComments(@RequestParam Map<String, String> queryParams) {
         queryParams.put("", "");
         queryParams.put(CONTENT, "content");
-        queryParams.put(DATE, "2018-05-30T19:35:22.346Z");
+        queryParams.put(DATE, "2018-05-30T23:35:22.346Z");
         queryParams.put(TIMEZONE, "IST");
         queryParams.put(LOCATION_NAME, "Taj Mahal");
         queryParams.put(POST_TYPE, "IMAGE");

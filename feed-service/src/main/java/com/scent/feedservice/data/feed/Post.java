@@ -1,44 +1,29 @@
 package com.scent.feedservice.data.feed;
 
-
-import org.json.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
-
-import static com.scent.feedservice.Util.Constants.*;
-
+import java.util.HashSet;
+import java.util.Set;
 
 @Document(collection = "post")
 public class Post {
    @Id
    private String postId;
-   private String commentId;
    private String createdDate;
-   private String timeZone;
    private String expiryDate;
    private String content;
-   private long upVote = 0;
-   private long downVote = 0;
+   private Set<String> upVote;
    private String imageUrl;
    private String userId;
-   private String commentUrl;
-   private List<String> reportedBy;
    private PrivacyType privacy;
    private Location location;
    private Boolean isLocationHidden;
    private PostType postType;
    private Boolean flagToDelete;
-   public Post(){ }
-   public JSONObject toJSONObject(Post post){
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put(POST_ID, post.getPostId());
-      jsonObject.put(TIMEZONE, post.getTimeZone());
-      jsonObject.put(USER_ID, post.getUserId());
-      jsonObject.put(LOCATION, post.getLocation().getLocationJson());
-      return jsonObject;
+   public Post(){
+      upVote = new HashSet<>();
    }
+
    public String getPostId() {
       return postId;
    }
@@ -47,28 +32,12 @@ public class Post {
       this.postId = postId;
    }
 
-   public String getCommentId() {
-      return commentId;
-   }
-
-   public void setCommentId(String commentId) {
-      this.commentId = commentId;
-   }
-
    public String getCreatedDate() {
       return createdDate;
    }
 
    public void setCreatedDate(String createdDate) {
       this.createdDate = createdDate;
-   }
-
-   public String getTimeZone() {
-      return timeZone;
-   }
-
-   public void setTimeZone(String timeZone) {
-      this.timeZone = timeZone;
    }
 
    public String getExpiryDate() {
@@ -87,20 +56,20 @@ public class Post {
       this.content = content;
    }
 
-   public long getUpVote() {
+   public Set<String> getUpVote() {
       return upVote;
    }
 
-   public void setUpVote(long upVote) {
+   public void setUpVote(Set<String> upVote) {
       this.upVote = upVote;
    }
 
-   public long getDownVote() {
-      return downVote;
+   public boolean addToUpVote(String userId) {
+      return upVote.add(userId);
    }
 
-   public void setDownVote(long downVote) {
-      this.downVote = downVote;
+   public boolean removeFromUpVote(String userId) {
+      return upVote.remove(userId);
    }
 
    public String getImageUrl() {
@@ -117,22 +86,6 @@ public class Post {
 
    public void setUserId(String userId) {
       this.userId = userId;
-   }
-
-   public String getCommentUrl() {
-      return commentUrl;
-   }
-
-   public void setCommentUrl(String commentUrl) {
-      this.commentUrl = commentUrl;
-   }
-
-   public List<String> getReportedBy() {
-      return reportedBy;
-   }
-
-   public void setReportedBy(List<String> reportedBy) {
-      this.reportedBy = reportedBy;
    }
 
    public PrivacyType getPrivacy() {
@@ -171,11 +124,25 @@ public class Post {
       return flagToDelete;
    }
 
-
    public void setFlagToDelete(Boolean flagToDelete) {
       this.flagToDelete = flagToDelete;
-
    }
 
-
+   @Override
+   public String toString() {
+      return "Post{" +
+              "postId='" + postId + '\'' +
+              ", createdDate='" + createdDate + '\'' +
+              ", expiryDate='" + expiryDate + '\'' +
+              ", content='" + content + '\'' +
+              ", upVote=" + upVote +
+              ", imageUrl='" + imageUrl + '\'' +
+              ", userId='" + userId + '\'' +
+              ", privacy=" + privacy +
+              ", location=" + location +
+              ", isLocationHidden=" + isLocationHidden +
+              ", postType=" + postType +
+              ", flagToDelete=" + flagToDelete +
+              '}';
+   }
 }

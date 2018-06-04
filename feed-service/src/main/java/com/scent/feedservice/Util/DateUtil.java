@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static com.scent.feedservice.Util.Constants.EMPTY;
+
 public class DateUtil {
     private static final Logger LOG = LogManager.getLogger(DateUtil.class);
     /**
@@ -68,5 +70,91 @@ public class DateUtil {
         }
         return formatter.format(cal.getTime());
     }
+
+    public static String updateHourToExpiryDate(String startDate, int hour,
+                                                String inputDateTimePattern, String timeZoneId) {
+        SimpleDateFormat formatter = new SimpleDateFormat(inputDateTimePattern,
+                Locale.getDefault(Locale.Category.FORMAT));
+        TimeZone timezone = TimeZone.getTimeZone(timeZoneId);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(timezone);
+        try {
+            Date date = formatter.parse(startDate);
+            cal.setTime(date);
+            cal.add(Calendar.HOUR_OF_DAY, hour);
+        } catch (ParseException e) {
+            LoggerUtil.error(LOG,
+                    String.format("ParseException in addDaysToGivenDate for date string: [%s]", startDate), e);
+        }
+        return formatter.format(cal.getTime());
+    }
+
+    /**
+     * This method is used to return the time in milliseconds for the given
+     * date/time. It accepts date/time format for creating the date, and time
+     * zone for creating the calendar instance.
+     *
+     * @param dateTime
+     *            input dateTime
+     * @param dateTimePattern
+     *            pattern of input dateTime
+     * @param timeZoneId
+     *            time zone of input dateTime
+     * @return dateTime converted into milliseconds
+     */
+    public static long getTimeInMillis(String dateTime, String dateTimePattern, String timeZoneId) {
+        TimeZone timezone = TimeZone.getTimeZone(timeZoneId);
+        Calendar calendar = Calendar.getInstance(timezone);
+
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(dateTimePattern,
+                    Locale.getDefault(Locale.Category.FORMAT));
+            formatter.setCalendar(calendar);
+            calendar.setTime(formatter.parse(dateTime));
+        } catch (ParseException e) {
+//            LoggerUtil.error(LOG, String.format(Constants.LOG_PARSE_EXCEPTION, dateTime, dateTimePattern, timeZoneId),
+//                    e);
+        }
+
+        return calendar.getTimeInMillis();
+    }
+    /**
+     * This method is used to return the get date in (February 13, Wednesday)
+     * format for the given time zone id. *
+     *
+     * @param dateTime
+     *            input dateTime
+     *
+     * @param inputPattern
+     *            the input date pattern.
+     * @param inputTimezone
+     *            the input date TimeZone id.
+     * @param outputPattern
+     *            the output date pattern.
+     * @param outputTimezone
+     *            the output date TimeZone id.
+     * @return currentDate the current date in given format.
+     */
+    public static String convertDateToTimeZone(String dateTime, String inputPattern, String inputTimezone,
+                                          String outputPattern, String outputTimezone) {
+        Calendar calendarIn = Calendar.getInstance(TimeZone.getTimeZone(inputTimezone));
+        Calendar calendarOut = Calendar.getInstance(TimeZone.getTimeZone(outputTimezone));
+        String dateOut = EMPTY;
+        try {
+            SimpleDateFormat formatterIn = new SimpleDateFormat(inputPattern,
+                    Locale.getDefault(Locale.Category.FORMAT));
+            SimpleDateFormat formatterOut = new SimpleDateFormat(outputPattern,
+                    Locale.getDefault(Locale.Category.FORMAT));
+            formatterIn.setCalendar(calendarIn);
+            formatterOut.setCalendar(calendarOut);
+            Date date = formatterIn.parse(dateTime);
+            dateOut = formatterOut.format(date);
+        } catch (ParseException e) {
+//            LoggerUtil.error(LOG, String.format(Constants.LOG_PARSE_EXCEPTION, dateTime, inputPattern, inputTimezone),
+//                    e);
+        }
+        return dateOut;
+    }
+
 
 }

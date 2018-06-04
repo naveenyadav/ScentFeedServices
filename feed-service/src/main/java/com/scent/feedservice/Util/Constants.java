@@ -54,4 +54,9 @@ public class Constants {
 
     //Event Data
     public static final String JSON_RESPONSE_FILTER = "jsonResponseFilter";
+    public static final String PROP_POST_HOUR_DOWN_VOTE = "post.downvote.hour";
+    public static final String PROP_POST_HOUR_UP_VOTE = "post.upvote.one.hour";
+    public static final String PROP_POST_HOUR_UP_VOTE_1000 = "post.upvote.thousand.hour";
+    public static final String PROP_POST_HOUR_UP_VOTE_2000 = "post.upvote.twothousands.hour";
+    public static final String CURRENT_DATE = "currentDate";
 }
