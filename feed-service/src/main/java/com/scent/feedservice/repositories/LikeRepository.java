@@ -7,8 +7,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface LikeRepository extends ReactiveMongoRepository<Like, String> {
-   Mono<Like> getLikeByPostId(String postId);
+   Mono<Like> getLikeByUserId(String userId);
 
-
-
+   Mono<Long> countLikesByUserId(String userId);
 }

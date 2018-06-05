@@ -1,5 +1,6 @@
 package com.scent.feedservice.steps;
 
+import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
 import com.scent.feedservice.data.feed.Like;
@@ -26,24 +27,39 @@ public class LikeAction implements IAction {
     public void perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
-        //Create like entry
-        Mono<Like> likeMono = likeRepository.getLikeByPostId(paramMap.get(POST_ID));
 
-        likeMono.flatMap(like -> {
+        //Check user exists
+        //likeRepository.countLikesByUserId(paramMap.get(USER_ID)).subscribe(System.out::println);
+        CreateLikeSubscriber<Like> createLikeSubscriber = new CreateLikeSubscriber<>();
+//        Like like = new Like();
+//        like.setUserId(paramMap.get(USER_ID));
+//
+//        likeRepository.save(like).subscribe(System.out::println);
 
-            if(like == null){
-                return Mono.just(like);
-            }else{
-                LongStream.range(0, 900000).mapToObj(i -> i + "").forEach(like::addUser);
-            }
-           return Mono.just(like);
-        }).subscribe(this::createLike, this::errorHandler);
+        likeRepository.getLikeByUserId(paramMap.get(USER_ID)).single().subscribe(this::createLike, this::errorHandler);
+
+//        Mono<Like> likeMono = likeRepository.getLikeByPostId(paramMap.get(POST_ID));
+//
+//        likeMono.flatMap(like -> {
+//
+//            if(like == null){
+//                return Mono.just(like);
+//            }else{
+//                LongStream.range(0, 900000).mapToObj(i -> i + "").forEach(like::addUser);
+//            }
+//           return Mono.just(like);
+//        }).subscribe(this::createLike, this::errorHandler);
 
 
 
     }
+    private void subscriberCreateLike(){
+
+    }
+
     private void createLike(Like like){
-        likeRepository.save(like).subscribe(System.out::println);
+        System.out.println("Reached here");
+       // likeRepository.save(like).subscribe(System.out::println);
     }
     private void errorHandler(Throwable ex){
         System.out.print(ex.toString());

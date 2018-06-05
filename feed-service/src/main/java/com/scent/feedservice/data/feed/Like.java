@@ -2,10 +2,8 @@ package com.scent.feedservice.data.feed;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 
 @Document(collection = "Likes")
 public class Like {
@@ -29,5 +27,13 @@ public class Like {
 
     public void setPosts(List<String> posts) {
         this.posts = posts;
+    }
+
+    @Override
+    public String toString() {
+        return "Like{" +
+                "userId='" + userId + '\'' +
+                ", posts=" + posts +
+                '}';
     }
 }
