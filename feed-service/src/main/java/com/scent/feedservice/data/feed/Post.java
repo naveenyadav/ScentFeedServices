@@ -12,7 +12,7 @@ public class Post {
    private String createdDate;
    private String expiryDate;
    private String content;
-   private Set<String> upVote;
+   private long upVote;
    private String imageUrl;
    private String userId;
    private PrivacyType privacy;
@@ -21,7 +21,7 @@ public class Post {
    private PostType postType;
    private Boolean flagToDelete;
    public Post(){
-      upVote = new HashSet<>();
+
    }
 
    public String getPostId() {
@@ -56,20 +56,12 @@ public class Post {
       this.content = content;
    }
 
-   public Set<String> getUpVote() {
+   public long getUpVote() {
       return upVote;
    }
 
-   public void setUpVote(Set<String> upVote) {
+   public void setUpVote(long upVote) {
       this.upVote = upVote;
-   }
-
-   public boolean addToUpVote(String userId) {
-      return upVote.add(userId);
-   }
-
-   public boolean removeFromUpVote(String userId) {
-      return upVote.remove(userId);
    }
 
    public String getImageUrl() {

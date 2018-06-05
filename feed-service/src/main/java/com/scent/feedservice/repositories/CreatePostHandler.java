@@ -41,6 +41,8 @@ public class CreatePostHandler extends AbstractRepository{
     }
 
 
+
+
     public ResponseData handleEvent(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
@@ -82,25 +84,27 @@ public class CreatePostHandler extends AbstractRepository{
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
         // Get Post from id
         Mono<Post> postMono = postRepository.getPostByPostId(paramMap.get(POST_ID));
-
         postMono.flatMap(post -> {
-            if(post.addToUpVote(paramMap.get(USER_ID))){
-                String expiryDate = post.getExpiryDate();
-                int upVoteHour = getValueFromGlobalAsInteger(upVoteIncrement(post));
-                String date = DateUtil.updateHourToExpiryDate(expiryDate, upVoteHour, POST_TIME_PATTERN, TIMEZONE_UTC);
-                post.setExpiryDate(date);
-            }
+            //Rule 1 - is not owner of the post
+            boolean result = !post.getUserId().equals(paramMap.get(USER_ID));
+
+//            if(post.addToUpVote(paramMap.get(USER_ID))){
+//                String expiryDate = post.getExpiryDate();
+//                int upVoteHour = getValueFromGlobalAsInteger(upVoteIncrement(post));
+//                String date = DateUtil.updateHourToExpiryDate(expiryDate, upVoteHour, POST_TIME_PATTERN, TIMEZONE_UTC);
+//                post.setExpiryDate(date);
+//            }
             return Mono.just(post);
         }).flatMap(postRepository::save).subscribe(System.out::println);
 
     }
 
     private String upVoteIncrement(Post post){
-        if(post.getUpVote().size() >= 2000)
-            return PROP_POST_HOUR_UP_VOTE_2000;
-        else if(post.getUpVote().size() >= 1000 && post.getUpVote().size() < 1000){
-            return PROP_POST_HOUR_UP_VOTE_1000;
-        }
+//        if(post.getUpVote().size() >= 2000)
+//            return PROP_POST_HOUR_UP_VOTE_2000;
+//        else if(post.getUpVote().size() >= 1000 && post.getUpVote().size() < 1000){
+//            return PROP_POST_HOUR_UP_VOTE_1000;
+//        }
         return PROP_POST_HOUR_UP_VOTE;
     }
 

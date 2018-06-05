@@ -156,5 +156,24 @@ public class DateUtil {
         return dateOut;
     }
 
+    public static String getCurrentYear(String dateTime, String dateTimePattern, String timeZoneId) {
+        TimeZone timezone = TimeZone.getTimeZone(timeZoneId);
+        Calendar calendar = Calendar.getInstance(timezone);
+        String year = EMPTY;
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(dateTimePattern,
+                    Locale.getDefault(Locale.Category.FORMAT));
+            formatter.setCalendar(calendar);
+            calendar.setTime(formatter.parse(dateTime));
+            formatter = new SimpleDateFormat(Constants.YEAR_FORMAT, Locale.getDefault(Locale.Category.FORMAT));
+            year = formatter.format(calendar.getTime());
+        } catch (ParseException e) {
+//            LoggerUtil.error(LOG, String.format(Constants.LOG_PARSE_EXCEPTION, dateTime, dateTimePattern, timeZoneId),
+//                    e);
+        }
+        return year;
+
+    }
+
 
 }

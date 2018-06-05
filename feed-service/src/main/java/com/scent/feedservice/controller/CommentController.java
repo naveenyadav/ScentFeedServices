@@ -3,6 +3,7 @@ package com.scent.feedservice.controller;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
 import com.scent.feedservice.repositories.CreatePostHandler;
+import com.scent.feedservice.steps.LikeAction;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,9 +25,9 @@ import static com.scent.feedservice.Util.Constants.*;
 @RequestMapping("/comment")
 public class CommentController {
 
-    private CreatePostHandler postRepositoryImpl;
-    public CommentController(CreatePostHandler postRepositoryImpl){
-        this.postRepositoryImpl = postRepositoryImpl;
+    private LikeAction likeAction;
+    public CommentController(LikeAction likeAction){
+        this.likeAction = likeAction;
     }
     /**
      * This GET controller method is used to handle following.
@@ -49,7 +50,7 @@ public class CommentController {
         RequestData requestData = getRequestData(queryParams);
 
         eventData.setRequestData(requestData);
-        postRepositoryImpl.handleEvent(eventData);
+        likeAction.perFormAction(eventData);
 
         return "Success";
 
