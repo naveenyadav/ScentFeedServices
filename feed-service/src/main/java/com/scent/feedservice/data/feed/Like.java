@@ -2,17 +2,21 @@ package com.scent.feedservice.data.feed;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Document(collection = "Likes")
 public class Like {
     @Id
     private String userId;
-    private List<String> posts;
+    private Set<String> posts;
     public Like(){
-
+        posts = new HashSet<>();
     }
+
     public String getUserId() {
         return userId;
     }
@@ -21,19 +25,14 @@ public class Like {
         this.userId = userId;
     }
 
-    public List<String> getPosts() {
+    public Set<String> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<String> posts) {
+    public void setPosts(Set<String> posts) {
         this.posts = posts;
     }
-
-    @Override
-    public String toString() {
-        return "Like{" +
-                "userId='" + userId + '\'' +
-                ", posts=" + posts +
-                '}';
+    public void addPosts(String postId){
+        this.posts.add(userId);
     }
 }

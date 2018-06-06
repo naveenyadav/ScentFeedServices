@@ -60,4 +60,6 @@ public class Constants {
     public static final String PROP_POST_HOUR_UP_VOTE_2000 = "post.upvote.twothousands.hour";
     public static final String CURRENT_DATE = "currentDate";
     public static final String YEAR_FORMAT = "YYYY";
+    public static final String YEAR = "year";
+
 }

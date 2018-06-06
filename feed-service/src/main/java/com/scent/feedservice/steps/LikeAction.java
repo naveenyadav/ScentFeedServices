@@ -19,24 +19,32 @@ import static com.scent.feedservice.Util.Constants.USER_ID;
 
 @Component
 public class LikeAction implements IAction {
+
     private LikeRepository likeRepository;
+
     public LikeAction(LikeRepository likeRepository){
         this.likeRepository = likeRepository;
     }
+
     @Override
     public void perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
 
+
+
         //Check user exists
-        //likeRepository.countLikesByUserId(paramMap.get(USER_ID)).subscribe(System.out::println);
-        CreateLikeSubscriber<Like> createLikeSubscriber = new CreateLikeSubscriber<>();
+        //likeRepository.countLikesByUserId(paramMap.get(USER_ID)).subscribe(System.out::println, this::errorHandler);
+
+
+
+      CreateLikeSubscriber<Like> createLikeSubscriber = new CreateLikeSubscriber<>();
 //        Like like = new Like();
 //        like.setUserId(paramMap.get(USER_ID));
 //
 //        likeRepository.save(like).subscribe(System.out::println);
 
-        likeRepository.getLikeByUserId(paramMap.get(USER_ID)).single().subscribe(this::createLike, this::errorHandler);
+        likeRepository.getLikeByUserId(paramMap.get(USER_ID)).single().subscribe(createLikeSubscriber);
 
 //        Mono<Like> likeMono = likeRepository.getLikeByPostId(paramMap.get(POST_ID));
 //

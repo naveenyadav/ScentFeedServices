@@ -12,7 +12,7 @@ public class Post {
    private String createdDate;
    private String expiryDate;
    private String content;
-   private long upVote;
+   private long votes;
    private String imageUrl;
    private String userId;
    private PrivacyType privacy;
@@ -56,12 +56,12 @@ public class Post {
       this.content = content;
    }
 
-   public long getUpVote() {
-      return upVote;
+   public long getVotes() {
+      return votes;
    }
 
-   public void setUpVote(long upVote) {
-      this.upVote = upVote;
+   public void setVotes(long votes) {
+      this.votes = votes;
    }
 
    public String getImageUrl() {
@@ -118,23 +118,5 @@ public class Post {
 
    public void setFlagToDelete(Boolean flagToDelete) {
       this.flagToDelete = flagToDelete;
-   }
-
-   @Override
-   public String toString() {
-      return "Post{" +
-              "postId='" + postId + '\'' +
-              ", createdDate='" + createdDate + '\'' +
-              ", expiryDate='" + expiryDate + '\'' +
-              ", content='" + content + '\'' +
-              ", upVote=" + upVote +
-              ", imageUrl='" + imageUrl + '\'' +
-              ", userId='" + userId + '\'' +
-              ", privacy=" + privacy +
-              ", location=" + location +
-              ", isLocationHidden=" + isLocationHidden +
-              ", postType=" + postType +
-              ", flagToDelete=" + flagToDelete +
-              '}';
    }
 }
