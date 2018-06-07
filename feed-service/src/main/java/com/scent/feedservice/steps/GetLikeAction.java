@@ -17,18 +17,12 @@ public class GetLikeAction implements  IAction{
         this.likeRepository = likeRepository;
     }
     @Override
-    public void performAction(EventData eventData){
+    public void perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
         String userId = paramMap.get(USER_ID);
         String year = DateUtil.getCurrentYear(paramMap.get(DATE), POST_TIME_PATTERN, TIMEZONE_UTC);
-        likeRepository.countLikesByUserId(year + "-" + userId).single().subscribe(this::onSuccess, this::onError);
+        //likeRepository.countLikesByUserId(year + "-" + userId).single().subscribe(this::onSuccess, this::onError);
     }
 
-    public void onSuccess(Long long){
-
-    }
-    public void onError(Throwable throwable){
-
-    }
 }

@@ -17,7 +17,7 @@ public class SaveLikeAction implements  IAction{
         this.likeRepository = likeRepository;
     }
     @Override
-    public void performAction(EventData eventData){
+    public void perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
         String postId = paramMap.get(POST_ID);
@@ -26,13 +26,13 @@ public class SaveLikeAction implements  IAction{
         Like like = new Like();
         like.setUserId(year + "_" + userId);
         like.addPosts(postId);
-        likeRepository.save(like).subscribe(this::onSuccess, this::onError);
+        likeRepository.save(like).subscribe(liked->onSuccess(liked, eventData), error->onError(error, eventData));
     }
 
-    public void onSuccess(Like like){
+    public void onSuccess(Like like, EventData eventData){
 
     }
-    public void onError(Throwable throwable){
+    public void onError(Throwable throwable, EventData eventData){
 
     }
 }

@@ -30,21 +30,7 @@ public class LikeAction implements IAction {
     public void perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
-
-
-
-        //Check user exists
-        //likeRepository.countLikesByUserId(paramMap.get(USER_ID)).subscribe(System.out::println, this::errorHandler);
-
-
-
-      CreateLikeSubscriber<Like> createLikeSubscriber = new CreateLikeSubscriber<>();
-//        Like like = new Like();
-//        like.setUserId(paramMap.get(USER_ID));
-//
-//        likeRepository.save(like).subscribe(System.out::println);
-
-        likeRepository.getLikeByUserId(paramMap.get(USER_ID)).single().subscribe(createLikeSubscriber);
+        likeRepository.countLikesByUserId(paramMap.get(USER_ID)).single().subscribe(i-> onSuccess(i, eventData), e-> onError(e,));
 
 //        Mono<Like> likeMono = likeRepository.getLikeByPostId(paramMap.get(POST_ID));
 //
@@ -61,16 +47,13 @@ public class LikeAction implements IAction {
 
 
     }
-    private void subscriberCreateLike(){
+    private void onSuccess(long like, EventData eventData){
 
     }
 
-    private void createLike(Like like){
-        System.out.println("Reached here");
-       // likeRepository.save(like).subscribe(System.out::println);
-    }
-    private void errorHandler(Throwable ex){
-        System.out.print(ex.toString());
+
+    private void onError(Throwable ex, EventData eventData){
+
     }
 //    private void createLikeEntry(Like flag, Map<String, String> paramMap ){
 //      if(flag==null) {

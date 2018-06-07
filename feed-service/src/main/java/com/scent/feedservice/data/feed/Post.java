@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Document(collection = "post")
-public class Post {
+public class Post{
    @Id
    private String postId;
    private String createdDate;

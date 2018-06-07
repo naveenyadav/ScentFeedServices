@@ -2,6 +2,7 @@ package com.scent.feedservice.data;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.scent.feedservice.data.feed.IData;
 import org.reactivestreams.Publisher;
 
 import java.util.HashMap;

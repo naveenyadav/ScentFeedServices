@@ -4,6 +4,7 @@ package com.scent.feedservice.repositories;
 import com.scent.feedservice.Util.ConfigServiceImpl;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.ResponseData;
+import com.scent.feedservice.data.feed.IData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.UriTemplate;
 
@@ -80,24 +81,6 @@ public class AbstractRepository {
         return configServiceImpl.getPropertyValueAsInteger(GLOBAL_CONFIG, key);
     }
 
-    /**
-     * updates the ResponseData in given transactionData with the given
-     * serviceResponse.
-     *
-     * @param eventName
-     *            name of event with which serviceResponse to be set.
-     * @param transactionData
-     *            container of ResponseData
-     * @param serviceResponse
-     *            the response from rest service to be set in ResponseData
-     * @return updated ResponseData
-     */
-    protected ResponseData updateResponse(String eventName, EventData eventData,
-                                          Object serviceResponse) {
-        // Set response data.
-        ResponseData responseData = eventData.getResponseData();
-        //responseData.setData(eventName, serviceResponse);
-        return responseData;
-    }
+
 
 }

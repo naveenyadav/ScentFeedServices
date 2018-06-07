@@ -1,11 +1,13 @@
 package com.scent.feedservice.steps;
 
+import com.scent.feedservice.Util.CommonUtil;
 import com.scent.feedservice.Util.ConfigServiceImpl;
 import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
 import com.scent.feedservice.data.feed.Post;
 import com.scent.feedservice.repositories.PostRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
 
@@ -24,23 +26,42 @@ public class UpVoteAction implements IAction {
 
 
     @Override
-    public void performAction(EventData eventData){
+    public void perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
+
+        //Get Post By postId
         Mono<Post> postMono = postRepository.getPostByPostId(paramMap.get(POST_ID));
-        postMono.flatMap(post -> {
-            //Rule 1 - is not owner of the post
+        JSONObject json =  null;
+        if(eventData.getResponseData().getData("GetPost") instanceof JSONObject){
+            json =  (JSONObject) eventData.getResponseData().getData("GetPost");
+        }
+        if(CommonUtil.isSuccessResponse(json)) {
+            Post post = (Post) json.get("data");
             boolean result = !post.getUserId().equals(paramMap.get(USER_ID));
             if(result) {
+                //Get post node expiry date
                 String expiryDate = post.getExpiryDate();
+                //Get specified hour configured for various upvotes level
                 int upVoteHour = configServiceImpl.getPropertyValueAsInteger(GLOBAL_CONFIG, upVoteIncrement(post));
+                //Add the upVote hour to expiry date
                 String date = DateUtil.updateHourToExpiryDate(expiryDate, upVoteHour, POST_TIME_PATTERN, TIMEZONE_UTC);
+                //now change the expiry date
                 post.setExpiryDate(date);
-                return Mono.just(post);
-            }else{
-                return Mono.empty();
+                postRepository.save(post).subscribe(post1 -> onSavingSucceess(post, eventData), error->onError(error, eventData));
             }
-        }).flatMap(postRepository::save).subscribe(System.out::println);
+        }
+    }
+
+    public void onSavingSucceess(Post post, EventData eventData){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data", post);
+        updateResponse("UpVote", eventData, jsonObject);
+    }
+
+    public void onError(Throwable throwable, EventData eventData){
+        JSONObject jsonObject = CommonUtil.getErrorResponse(throwable.toString(), EMPTY, true);
+        updateResponse("UpVote", eventData, jsonObject);
     }
 
     private String upVoteIncrement(Post post){

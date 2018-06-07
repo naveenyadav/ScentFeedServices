@@ -61,5 +61,10 @@ public class Constants {
     public static final String CURRENT_DATE = "currentDate";
     public static final String YEAR_FORMAT = "YYYY";
     public static final String YEAR = "year";
+    public static final String ERROR_STATUS_KEY = "errorStatus";
+    public static final String ERROR_STATUS_VALUE = "failed";
+    public static final String DOUBLE_QUOTE = "\"";
+    public static final String EXCEPTION_TEXT = "errorMessage";
+    public static final  String JSON_STATUS_CODE = "StatusCode";
 
 }

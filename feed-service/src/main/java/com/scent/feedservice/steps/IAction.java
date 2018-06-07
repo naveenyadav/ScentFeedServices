@@ -2,6 +2,7 @@ package com.scent.feedservice.steps;
 
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.ResponseData;
+import com.scent.feedservice.data.feed.IData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,11 +18,13 @@ public interface IAction {
     }
 
     default ResponseData updateResponse(String eventName, EventData eventData,
-                                          Object serviceResponse) {
+                                          Object data) {
         // Set response data.
         ResponseData responseData = eventData.getResponseData();
-        responseData.setData(eventName, serviceResponse);
+        responseData.setData(eventName, data);
         return responseData;
     }
+
+
 
 }
