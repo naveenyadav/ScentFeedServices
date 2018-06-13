@@ -2,8 +2,7 @@ package com.scent.feedservice.controller;
 
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
-import com.scent.feedservice.repositories.CreatePostHandler;
-import com.scent.feedservice.steps.LikeAction;
+import com.scent.feedservice.steps.UpVoteAction;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,9 +24,9 @@ import static com.scent.feedservice.Util.Constants.*;
 @RequestMapping("/comment")
 public class CommentController {
 
-    private LikeAction likeAction;
-    public CommentController(LikeAction likeAction){
-        this.likeAction = likeAction;
+    private UpVoteAction upVoteAction;
+    public CommentController(UpVoteAction upVoteAction){
+        this.upVoteAction = upVoteAction;
     }
     /**
      * This GET controller method is used to handle following.
@@ -44,13 +43,13 @@ public class CommentController {
         queryParams.put(TIMEZONE, "IST");
         queryParams.put(LOCATION_NAME, "Taj Mahal");
         queryParams.put(POST_TYPE, "IMAGE");
-        queryParams.put(USER_ID, "1");
+        queryParams.put(USER_ID, "2");
         EventData eventData = new EventData();
 
         RequestData requestData = getRequestData(queryParams);
 
         eventData.setRequestData(requestData);
-        likeAction.perFormAction(eventData);
+        upVoteAction.perFormAction(eventData);
 
         return "Success";
 

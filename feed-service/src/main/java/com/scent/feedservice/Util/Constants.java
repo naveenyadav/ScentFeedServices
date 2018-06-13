@@ -66,5 +66,6 @@ public class Constants {
     public static final String DOUBLE_QUOTE = "\"";
     public static final String EXCEPTION_TEXT = "errorMessage";
     public static final  String JSON_STATUS_CODE = "StatusCode";
+    public static final String UNDER_SCORE = "_";
 
 }

@@ -32,7 +32,7 @@ public class Like {
     public void setPosts(Set<String> posts) {
         this.posts = posts;
     }
-    public void addPosts(String postId){
-        this.posts.add(userId);
+    public boolean addPosts(String postId){
+       return this.posts.add(userId);
     }
 }

@@ -3,7 +3,7 @@ package com.scent.feedservice.repositories;
 
 import com.scent.feedservice.data.feed.Post;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import reactor.core.publisher.Flux;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 public interface PostRepository extends ReactiveMongoRepository<Post, String> {

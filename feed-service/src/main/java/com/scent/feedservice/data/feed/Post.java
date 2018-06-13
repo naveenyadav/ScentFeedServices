@@ -119,4 +119,22 @@ public class Post{
    public void setFlagToDelete(Boolean flagToDelete) {
       this.flagToDelete = flagToDelete;
    }
+
+   @Override
+   public String toString() {
+      return "Post{" +
+              "postId='" + postId + '\'' +
+              ", createdDate='" + createdDate + '\'' +
+              ", expiryDate='" + expiryDate + '\'' +
+              ", content='" + content + '\'' +
+              ", votes=" + votes +
+              ", imageUrl='" + imageUrl + '\'' +
+              ", userId='" + userId + '\'' +
+              ", privacy=" + privacy +
+              ", location=" + location +
+              ", isLocationHidden=" + isLocationHidden +
+              ", postType=" + postType +
+              ", flagToDelete=" + flagToDelete +
+              '}';
+   }
 }
