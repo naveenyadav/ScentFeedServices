@@ -33,6 +33,14 @@ public class Like {
         this.posts = posts;
     }
     public boolean addPosts(String postId){
-       return this.posts.add(userId);
+       return this.posts.add(postId);
+    }
+
+    @Override
+    public String toString() {
+        return "Like{" +
+                "userId='" + userId + '\'' +
+                ", posts=" + posts +
+                '}';
     }
 }

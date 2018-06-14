@@ -13,14 +13,21 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+
+import reactor.core.publisher.SignalType;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 import reactor.util.function.Tuple2;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 import static com.scent.feedservice.Util.Constants.*;
 
 @Component
 public class UpVoteAction implements IAction {
+    private Logger LOG = Loggers.getLogger(UpVoteAction.class);
+
     @Autowired
     protected ConfigServiceImpl configServiceImpl;
 
@@ -47,54 +54,53 @@ public class UpVoteAction implements IAction {
 
         //Get like by UserID
         Mono<Long> likeMono = likeRepository.countLikesByUserId(likeUserId)
-                .single().tag("GetLike", "getLike");
+                .single().tag("GetLike", "getLike").log(LOG, Level.INFO, true, SignalType.CURRENT_CONTEXT);
 
         //Get Post By postId
         Mono<Post> postMono = postRepository.getPostByPostId(postId).tag("GetPost", "getPost")
-                .flatMap(post -> processPost(post, userId)).tag("UpVote", "upVote").log();
+                .flatMap(post -> processPost(post, userId)).tag("UpVote", "upVote").log(LOG, Level.INFO, true, SignalType.CURRENT_CONTEXT);
 
         likeMono.zipWith(postMono).log().subscribe(tuple -> onSuccess(tuple,  paramMap));
         //Save like
         //update post
     }
 
+
     public void onSuccess(Tuple2<Long, Post> tuple, Map<String, String> paramMap){
 
         Long likeCout = tuple.getT1();
 
         Post post = tuple.getT2();
-        output(likeCout + post.toString() + "");
         String year = paramMap.get(YEAR);
         String userId = paramMap.get(USER_ID);
         String likeUserId = year.concat(UNDER_SCORE).concat(userId);
         String postId = paramMap.get(POST_ID);
-        Mono<Post> postMono = Mono.empty();
+        Mono<Like> likeMono = Mono.empty();
         if(likeCout == 0 && post != null) {
             Like like = new Like();
             like.setUserId(likeUserId);
             like.addPosts(postId);
-            Mono<Like> likeMono = likeRepository.save(like);
-            postMono = postRepository.save(post);
-            likeMono.zipWith(postMono).subscribe();
+            //Save like
+            likeMono = likeRepository.save(like);
         }else if(likeCout == 1 && null != post){
-            Mono<Like> likeMono = likeRepository.getLikeByUserId(likeUserId).flatMap( like -> {
-                Mono<Like> likeMono1 = Mono.empty();
+            //only add postId in like database
+            likeMono = likeRepository.getLikeByUserId(likeUserId).flatMap( like -> {
                 if(like.addPosts(postId)) {
-                    likeMono1 = likeRepository.save(like);
+                    return likeRepository.save(like);
                 }
-                return likeMono1;
+                return Mono.empty();
             });
-            likeMono.zipWith(postMono).subscribe();
         }
-
+        likeMono.subscribe(like -> savePost(like, post));
     }
-    public void output(String output){
-        System.out.println(output);
+    private void savePost(Like like, Post post){
+
+        if(like != null)
+          postRepository.save(post).subscribe();
     }
 
     public Mono<Post> processPost(Post post, String userId){
         boolean result = !post.getUserId().equals(userId);
-        this.output(result + "");
         if(result) {
             // add one vote
             post.setVotes(post.getVotes() + 1);

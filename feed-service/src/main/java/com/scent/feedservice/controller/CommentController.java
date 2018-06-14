@@ -37,13 +37,6 @@ public class CommentController {
      */
     @RequestMapping(value = "/getComments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String getComments(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
-        queryParams.put(CONTENT, "content");
-        queryParams.put(DATE, "2018-05-30T23:35:22.346Z");
-        queryParams.put(TIMEZONE, "IST");
-        queryParams.put(LOCATION_NAME, "Taj Mahal");
-        queryParams.put(POST_TYPE, "IMAGE");
-        queryParams.put(USER_ID, "2");
         EventData eventData = new EventData();
 
         RequestData requestData = getRequestData(queryParams);

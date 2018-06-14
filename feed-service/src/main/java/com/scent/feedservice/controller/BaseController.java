@@ -11,6 +11,12 @@ public abstract class BaseController {
 
     }
 
+    protected RequestData getRequestData(Map<String, String> queryParams) {
+        RequestData requestData = new RequestData();
+        requestData.setDataMap(queryParams);
+        return requestData;
+    }
+
 
 
 }
