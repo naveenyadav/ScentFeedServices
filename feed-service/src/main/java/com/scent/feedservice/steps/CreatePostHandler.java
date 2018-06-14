@@ -68,19 +68,19 @@ public class CreatePostHandler implements IAction {
         post.setContent(paramMap.get(CONTENT));
         post.setCreatedDate(createdDate);
         post.setExpiryDate(expiryDate);
-        Location location = getUserLocation(paramMap);
-        post.setLocation(location);
+        Double loc[] =  new Double[]{ Double.parseDouble(paramMap.get(LONGITUDE)), Double.parseDouble(paramMap.get(LATITUDE))};
+        post.setLocation(loc);
         return post;
     }
 
-    private Location getUserLocation(Map<String, String> paramMap){
-        Location location = new Location();
-        location.setType(POINT);
-        location.setLatitude(Double.parseDouble(paramMap.get(LATITUDE)));
-        location.setLongitude(Double.parseDouble(paramMap.get(LONGITUDE)));
-        location.setName(paramMap.get(LOCATION_NAME));
-        return location;
-    }
+//    private Location getUserLocation(Map<String, String> paramMap){
+////        Location location = new Location();
+////        location.setType(POINT);
+////        location.setLatitude(Double.parseDouble(paramMap.get(LATITUDE)));
+////        location.setLongitude(Double.parseDouble(paramMap.get(LONGITUDE)));
+////        location.setName(paramMap.get(LOCATION_NAME));
+//        return location;
+//    }
 
 //    public void upVote(EventData eventData){
 //        final RequestData requestData = eventData.getRequestData();

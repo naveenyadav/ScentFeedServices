@@ -2,6 +2,8 @@ package com.scent.feedservice.data.feed;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,10 +18,11 @@ public class Post{
    private String imageUrl;
    private String userId;
    private PrivacyType privacy;
-   private Location location;
+
    private Boolean isLocationHidden;
    private PostType postType;
    private Boolean flagToDelete;
+   private Double[] location;
    public Post(){
 
    }
@@ -88,13 +91,7 @@ public class Post{
       this.privacy = privacy;
    }
 
-   public Location getLocation() {
-      return location;
-   }
 
-   public void setLocation(Location location) {
-      this.location = location;
-   }
 
    public Boolean getLocationHidden() {
       return isLocationHidden;
@@ -120,21 +117,29 @@ public class Post{
       this.flagToDelete = flagToDelete;
    }
 
-   @Override
-   public String toString() {
-      return "Post{" +
-              "postId='" + postId + '\'' +
-              ", createdDate='" + createdDate + '\'' +
-              ", expiryDate='" + expiryDate + '\'' +
-              ", content='" + content + '\'' +
-              ", votes=" + votes +
-              ", imageUrl='" + imageUrl + '\'' +
-              ", userId='" + userId + '\'' +
-              ", privacy=" + privacy +
-              ", location=" + location +
-              ", isLocationHidden=" + isLocationHidden +
-              ", postType=" + postType +
-              ", flagToDelete=" + flagToDelete +
-              '}';
-   }
+    public Double[] getLocation() {
+        return location;
+    }
+
+    public void setLocation(Double[] location) {
+        this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId='" + postId + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", expiryDate='" + expiryDate + '\'' +
+                ", content='" + content + '\'' +
+                ", votes=" + votes +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", userId='" + userId + '\'' +
+                ", privacy=" + privacy +
+                ", isLocationHidden=" + isLocationHidden +
+                ", postType=" + postType +
+                ", flagToDelete=" + flagToDelete +
+                ", location=" + Arrays.toString(location) +
+                '}';
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import reactor.core.publisher.Flux;
 
 import java.util.Map;
 
@@ -22,6 +23,12 @@ public class ListPost implements IAction {
         this.mongoOperations = mongoOperations;
     }
     public void perFormAction(EventData eventData){
+
+
+
+    }
+
+    public Flux<Post> getPosts(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
 
@@ -41,8 +48,6 @@ public class ListPost implements IAction {
         Query q = new Query(new Criteria("location").withinSphere(circle));
         System.out.println(q.toString());
 
-         mongoOperations.find(q, Post.class, "location").subscribe(System.out::println);
-
-
+        return mongoOperations.find(q, Post.class);
     }
 }
