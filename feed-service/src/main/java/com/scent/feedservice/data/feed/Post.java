@@ -4,27 +4,30 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Document(collection = "post")
-public class Post{
+public class Post {
    @Id
    private String postId;
-   private String createdDate;
-   private String expiryDate;
+   private Date createdDate;
+   private Date expiryDate;
    private String content;
    private long votes;
    private String imageUrl;
    private String userId;
-   private PrivacyType privacy;
 
+   private PrivacyType privacy;
    private Boolean isLocationHidden;
    private PostType postType;
    private Boolean flagToDelete;
    private Double[] location;
-   public Post(){
+   private String locationName;
 
+   public Post() {
+      location = new Double[2];
    }
 
    public String getPostId() {
@@ -35,21 +38,6 @@ public class Post{
       this.postId = postId;
    }
 
-   public String getCreatedDate() {
-      return createdDate;
-   }
-
-   public void setCreatedDate(String createdDate) {
-      this.createdDate = createdDate;
-   }
-
-   public String getExpiryDate() {
-      return expiryDate;
-   }
-
-   public void setExpiryDate(String expiryDate) {
-      this.expiryDate = expiryDate;
-   }
 
    public String getContent() {
       return content;
@@ -92,7 +80,6 @@ public class Post{
    }
 
 
-
    public Boolean getLocationHidden() {
       return isLocationHidden;
    }
@@ -117,29 +104,57 @@ public class Post{
       this.flagToDelete = flagToDelete;
    }
 
-    public Double[] getLocation() {
-        return location;
-    }
+   public Double[] getLocation() {
+      return location;
+   }
 
-    public void setLocation(Double[] location) {
-        this.location = location;
-    }
+   public void setLocation(Double[] location) {
+      this.location = location;
+   }
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "postId='" + postId + '\'' +
-                ", createdDate='" + createdDate + '\'' +
-                ", expiryDate='" + expiryDate + '\'' +
-                ", content='" + content + '\'' +
-                ", votes=" + votes +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", userId='" + userId + '\'' +
-                ", privacy=" + privacy +
-                ", isLocationHidden=" + isLocationHidden +
-                ", postType=" + postType +
-                ", flagToDelete=" + flagToDelete +
-                ", location=" + Arrays.toString(location) +
-                '}';
-    }
+   public String getLocationName() {
+      return locationName;
+   }
+
+   public void setLocationName(String locationName) {
+      this.locationName = locationName;
+   }
+
+   public Date getCreatedDate() {
+      return createdDate;
+   }
+
+   public void setCreatedDate(Date createdDate) {
+      this.createdDate = createdDate;
+   }
+
+   public Date getExpiryDate() {
+      return expiryDate;
+   }
+
+   public void setExpiryDate(Date expiryDate) {
+      this.expiryDate = expiryDate;
+   }
+
+   @Override
+   public String toString() {
+      return "Post{" +
+              "postId='" + postId + '\'' +
+              ", createdDate=" + createdDate +
+              ", expiryDate='" + expiryDate + '\'' +
+              ", content='" + content + '\'' +
+              ", votes=" + votes +
+              ", imageUrl='" + imageUrl + '\'' +
+              ", userId='" + userId + '\'' +
+              ", privacy=" + privacy +
+              ", isLocationHidden=" + isLocationHidden +
+              ", postType=" + postType +
+              ", flagToDelete=" + flagToDelete +
+              ", location=" + Arrays.toString(location) +
+              ", locationName='" + locationName + '\'' +
+              '}';
+   }
 }
+
+
+

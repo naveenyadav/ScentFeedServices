@@ -8,6 +8,7 @@ import com.scent.feedservice.steps.CreatePostHandler;
 import com.scent.feedservice.steps.ListPost;
 import com.scent.feedservice.steps.UpVoteAction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import java.util.Map;
 import static com.scent.feedservice.Util.Constants.*;
 import static com.scent.feedservice.Util.Constants.POST_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * This controller class file is used to handle following:
@@ -46,10 +48,9 @@ public class PostController extends BaseController {
      * @param queryParams map of all request parameter name and its value
      * @return
      */
-    @RequestMapping(value = "/createPost", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/createPost", method = GET, produces = APPLICATION_JSON_VALUE)
     public String getMono(@RequestParam Map<String, String> queryParams) {
         queryParams.put(CONTENT, "content");
-        queryParams.put(DATE, "2018-05-30T23:35:22.346Z");
         queryParams.put(TIMEZONE, "IST");
         queryParams.put(LOCATION_NAME, "Taj Mahal");
 
@@ -72,7 +73,7 @@ public class PostController extends BaseController {
      * @param queryParams map of all request parameter name and its value
      * @return
      */
-    @RequestMapping(value = "/getPosts", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/getPosts", method = GET, produces = APPLICATION_JSON_VALUE)
     public Flux<Post> getFlux(@RequestParam Map<String, String> queryParams) {
         EventData eventData = new EventData();
         RequestData requestData = getRequestData(queryParams);
@@ -81,4 +82,30 @@ public class PostController extends BaseController {
         return likePost.getPosts(eventData);
 
     }
+
+    @RequestMapping(value = "/changePrivacy", method = GET, produces = APPLICATION_JSON_VALUE)
+    public void getEvents(@RequestParam Map<String, String> queryParams) {
+        queryParams.put("", "");
+    }
+
+    @RequestMapping(value = "/deletePost", method = GET, produces = APPLICATION_JSON_VALUE)
+    public void deletePost(@RequestParam Map<String, String> queryParams) {
+        queryParams.put("", "");
+    }
+
+    @RequestMapping(value = "/sortByDsitance", method = GET, produces = APPLICATION_JSON_VALUE)
+    public void sortByDistance(@RequestParam Map<String, String> queryParams) {
+        queryParams.put("", "");
+    }
+
+    @RequestMapping(value = "/sortByVotes", method = GET, produces = APPLICATION_JSON_VALUE)
+    public void sortByVotes(@RequestParam Map<String, String> queryParams) {
+        queryParams.put("", "");
+    }
+
+    @RequestMapping(value = "/sortByTime", method = GET, produces = APPLICATION_JSON_VALUE)
+    public void sortByTime(@RequestParam Map<String, String> queryParams) {
+        queryParams.put("", "");
+    }
+
 }

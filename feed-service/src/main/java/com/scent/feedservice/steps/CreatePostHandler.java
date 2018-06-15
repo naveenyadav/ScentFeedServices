@@ -6,6 +6,7 @@ import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.*;
 import com.scent.feedservice.data.feed.Location;
 import com.scent.feedservice.data.feed.Post;
+import com.scent.feedservice.data.feed.PrivacyType;
 import com.scent.feedservice.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,8 +14,9 @@ import reactor.util.Logger;
 import reactor.util.Loggers;
 
 import javax.annotation.PostConstruct;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.scent.feedservice.Util.Constants.*;
 
@@ -43,11 +45,6 @@ public class CreatePostHandler implements IAction {
 //        addToRequiredFieldList(requiredFields);
     }
 
-
-
-
-
-
     public void perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
@@ -58,19 +55,30 @@ public class CreatePostHandler implements IAction {
         //POST expiry day count
         int postExpiryDayCount = configServiceImpl.getPropertyValueAsInteger(GLOBAL_CONFIG, PROP_POST_EXPIRY_DAY);
 
-        String expiryDate = DateUtil.addAdvanceDaysToGivenDate(paramMap.get(DATE), postExpiryDayCount, POST_TIME_PATTERN, TIMEZONE_UTC);
+        Date expiryDate = DateUtil.addAdvanceDaysToGivenDate(paramMap.get(DATE), postExpiryDayCount, POST_TIME_PATTERN, TIMEZONE_UTC);
 
-        String createdDate = DateUtil.formatDate(paramMap.get(DATE), POST_TIME_PATTERN, POST_TIME_PATTERN);
+        Date createdDate = DateUtil.getFormatDate(paramMap.get(DATE), POST_TIME_PATTERN, POST_TIME_PATTERN);
 
         Post post = new Post();
         post.setPostId(UUID.randomUUID().toString());
+        post.setPrivacy(PrivacyType.PUBLIC);
         post.setUserId(paramMap.get(USER_ID));
         post.setContent(paramMap.get(CONTENT));
         post.setCreatedDate(createdDate);
         post.setExpiryDate(expiryDate);
+        post.setLocationName(paramMap.get(LOCATION_NAME));
         Double loc[] =  new Double[]{ Double.parseDouble(paramMap.get(LONGITUDE)), Double.parseDouble(paramMap.get(LATITUDE))};
         post.setLocation(loc);
         return post;
+    }
+
+    private void createHashtag(String content){
+        Pattern MY_PATTERN = Pattern.compile("#[A-Za-z0-9]+");
+        Matcher mat = MY_PATTERN.matcher(content);
+        List<String> strs=new ArrayList<String>();
+        while (mat.find()) {
+            strs.add(mat.group(1));
+        }
     }
 
 //    private Location getUserLocation(Map<String, String> paramMap){
@@ -111,15 +119,15 @@ public class CreatePostHandler implements IAction {
 //        return PROP_POST_HOUR_UP_VOTE;
 //    }
 
-    private boolean timeDifference(Map<String, String> paramMap, Post post){
-        //String currentDate = DateUtil.convertDateToTimeZone(paramMap.get(DATE), POST_TIME_PATTERN, paramMap.get(TIMEZONE), POST_TIME_PATTERN, TIMEZONE_UTC);
-        long currentTimeInMillis = DateUtil.getTimeInMillis(paramMap.get(DATE), POST_TIME_PATTERN, TIMEZONE_UTC);
-        long expiryTimeInMillis = DateUtil.getTimeInMillis(post.getExpiryDate(), POST_TIME_PATTERN, TIMEZONE_UTC);
-        if(expiryTimeInMillis < currentTimeInMillis){
-            return false;
-        }
-        return true;
-    }
+//    private boolean timeDifference(Map<String, String> paramMap, Post post){
+//        //String currentDate = DateUtil.convertDateToTimeZone(paramMap.get(DATE), POST_TIME_PATTERN, paramMap.get(TIMEZONE), POST_TIME_PATTERN, TIMEZONE_UTC);
+//        long currentTimeInMillis = DateUtil.getTimeInMillis(paramMap.get(DATE), POST_TIME_PATTERN, TIMEZONE_UTC);
+//        long expiryTimeInMillis = DateUtil.getTimeInMillis(post.getExpiryDate(), POST_TIME_PATTERN, TIMEZONE_UTC);
+//        if(expiryTimeInMillis < currentTimeInMillis){
+//            return false;
+//        }
+//        return true;
+//    }
 
 
 

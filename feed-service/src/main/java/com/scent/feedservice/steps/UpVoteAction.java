@@ -19,6 +19,7 @@ import reactor.util.Logger;
 import reactor.util.Loggers;
 import reactor.util.function.Tuple2;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -106,16 +107,16 @@ public class UpVoteAction implements IAction {
             post.setVotes(post.getVotes() + 1);
 
             //Get post node expiry date
-            String expiryDate = post.getExpiryDate();
+            Date expiryDate = post.getExpiryDate();
 
             //Get specified hour configured for various upvotes level
             int upVoteHour = configServiceImpl.getPropertyValueAsInteger(GLOBAL_CONFIG, upVoteIncrement(post));
 
             //Add the upVote hour to expiry date
-            String date = DateUtil.updateHourToExpiryDate(expiryDate, upVoteHour, POST_TIME_PATTERN, TIMEZONE_UTC);
+            Date updatedDate = DateUtil.updateHourToExpiryDate(expiryDate, upVoteHour, TIMEZONE_UTC);
 
             //now change the expiry date
-            post.setExpiryDate(date);
+            post.setExpiryDate(updatedDate);
             return Mono.just(post);
         }else{
             return Mono.empty();

@@ -1,6 +1,8 @@
 package com.scent.feedservice.steps;
 
+import com.scent.feedservice.Util.Constants;
 import com.scent.feedservice.Util.CustomCriteria;
+import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
 import com.scent.feedservice.data.feed.Post;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 
+import java.util.Date;
 import java.util.Map;
 
 import static com.scent.feedservice.Util.Constants.*;
@@ -39,15 +42,22 @@ public class ListPost implements IAction {
         double distance = Double.parseDouble(paramMap.get(RADIUS));
         Assert.notNull(distance, "Distance must not be null!");
 
+        Date currentDate = DateUtil.getFormatDate(paramMap.get(CURRENT_DATE), POST_TIME_PATTERN, POST_TIME_PATTERN);
+        System.out.println(currentDate);
+
+
         String lim = paramMap.get(LIMIT);
         Assert.notNull(lim, "Limit must not be null!");
         int limit  = Integer.parseInt(lim);
-
         Circle circle = new Circle(longitude, latitude, distance);
-
         Query q = new Query(new Criteria("location").withinSphere(circle));
+        q.addCriteria(new Criteria("expiryDate").gte(currentDate));
+
+
         System.out.println(q.toString());
 
         return mongoOperations.find(q, Post.class);
+                //.filter(post ->
+                  //      DateUtil.getTimeInMillis(post.getExpiryDate(), POST_TIME_PATTERN, TIMEZONE_UTC) > currentTimeInMillis);
     }
 }

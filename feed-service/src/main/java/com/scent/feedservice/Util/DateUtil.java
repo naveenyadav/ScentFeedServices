@@ -39,6 +39,22 @@ public class DateUtil {
         return dateOut;
     }
 
+    public static Date getFormatDate(String dateIn, String datePatternIn, String datePatternOut) {
+        Date dateOut = null;
+        try {
+            String date = formatDate(dateIn, datePatternIn, datePatternOut);
+            SimpleDateFormat sdfOut = new SimpleDateFormat(datePatternOut, Locale.getDefault(Locale.Category.FORMAT));
+            dateOut = sdfOut.parse(date);
+        } catch (ParseException e) {
+            LoggerUtil.error(LOG,
+                    String.format("ParseException in formatDate for dateIn: %s, datePatternIn: %s, datePatternOut: %s",
+                            dateIn, datePatternIn, datePatternOut),
+                    e);
+        }
+
+        return dateOut;
+    }
+
     public static String getCurrentDate(String datePattern, String timeZoneId) {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZoneId));
         SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern, Locale.getDefault(Locale.Category.FORMAT));
@@ -53,7 +69,7 @@ public class DateUtil {
         return dateFormatter.format(calendar.getTime());
     }
 
-    public static String addAdvanceDaysToGivenDate(String startDate, int advanceNoOfDays,
+    public static Date addAdvanceDaysToGivenDate(String startDate, int advanceNoOfDays,
                                                    String inputDateTimePattern, String timeZoneId) {
         SimpleDateFormat formatter = new SimpleDateFormat(inputDateTimePattern,
                 Locale.getDefault(Locale.Category.FORMAT));
@@ -68,25 +84,16 @@ public class DateUtil {
             LoggerUtil.error(LOG,
                     String.format("ParseException in addDaysToGivenDate for date string: [%s]", startDate), e);
         }
-        return formatter.format(cal.getTime());
+        return cal.getTime();
     }
 
-    public static String updateHourToExpiryDate(String startDate, int hour,
-                                                String inputDateTimePattern, String timeZoneId) {
-        SimpleDateFormat formatter = new SimpleDateFormat(inputDateTimePattern,
-                Locale.getDefault(Locale.Category.FORMAT));
+    public static Date updateHourToExpiryDate(Date dateIn, int hour, String timeZoneId) {
         TimeZone timezone = TimeZone.getTimeZone(timeZoneId);
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(timezone);
-        try {
-            Date date = formatter.parse(startDate);
-            cal.setTime(date);
-            cal.add(Calendar.HOUR_OF_DAY, hour);
-        } catch (ParseException e) {
-            LoggerUtil.error(LOG,
-                    String.format("ParseException in addDaysToGivenDate for date string: [%s]", startDate), e);
-        }
-        return formatter.format(cal.getTime());
+        cal.setTime(dateIn);
+        cal.add(Calendar.HOUR_OF_DAY, hour);
+        return cal.getTime();
     }
 
     /**
