@@ -1,32 +1,30 @@
-package com.scent.feedservice.steps;
+package com.scent.feedservice.steps.poststeps;
 
-import com.scent.feedservice.Util.Constants;
-import com.scent.feedservice.Util.CustomCriteria;
 import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
 import com.scent.feedservice.data.feed.Post;
+import com.scent.feedservice.data.feed.StatusType;
+import com.scent.feedservice.steps.IAction;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Circle;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 import static com.scent.feedservice.Util.Constants.*;
 @Component
-public class ListPost implements IAction {
+public class ListPostStep implements IAction {
     private final ReactiveMongoOperations mongoOperations;
 
-    public ListPost(ReactiveMongoOperations mongoOperations){
+    public ListPostStep(ReactiveMongoOperations mongoOperations){
         this.mongoOperations = mongoOperations;
     }
     public void perFormAction(EventData eventData){
-
 
 
     }
@@ -36,28 +34,35 @@ public class ListPost implements IAction {
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
 
         double latitude = Double.parseDouble(paramMap.get(LATITUDE));
-        Assert.notNull(latitude, "Latitude must not be null!");
         double longitude = Double.parseDouble(paramMap.get(LONGITUDE));
-        Assert.notNull(longitude, "Longitude must not be null!");
         double distance = Double.parseDouble(paramMap.get(RADIUS));
-        Assert.notNull(distance, "Distance must not be null!");
 
-        Date currentDate = DateUtil.getFormatDate(paramMap.get(CURRENT_DATE), POST_TIME_PATTERN, POST_TIME_PATTERN);
-        System.out.println(currentDate);
+        Date currentDate = DateUtil.getFormatDate(paramMap.get(USER_DATE), POST_TIME_PATTERN, POST_TIME_PATTERN);
 
+        String privacyTypes = paramMap.get(PRIVACY_TYPE);
+        List<String> privacyArray = new ArrayList<>();
+
+        if(privacyTypes.contains(COMMA)){
+            privacyArray = Arrays.asList(privacyTypes.split(COMMA));
+        }else{
+            privacyArray.add(privacyTypes);
+        }
 
         String lim = paramMap.get(LIMIT);
-        Assert.notNull(lim, "Limit must not be null!");
         int limit  = Integer.parseInt(lim);
+
         Circle circle = new Circle(longitude, latitude, distance);
-        Query q = new Query(new Criteria("location").withinSphere(circle));
-        q.addCriteria(new Criteria("expiryDate").gte(currentDate));
 
+        //Filter by location
+        Query q = new Query(new Criteria(LOCATION).withinSphere(circle));
 
+        //Filter by Expiry Date
+        q.addCriteria(new Criteria(EXPIRY_DATE).gte(currentDate));
+        q.addCriteria(new Criteria(PRIVACY).in(privacyArray));
+        q.addCriteria(new Criteria(FLAG_TO_DELETE).in(StatusType.POSTED));
+        q.with(new Sort(Sort.Direction.ASC, EXPIRY_DATE));
+        q.with(new Sort(Sort.Direction.ASC, UP_VOTES));
         System.out.println(q.toString());
-
         return mongoOperations.find(q, Post.class);
-                //.filter(post ->
-                  //      DateUtil.getTimeInMillis(post.getExpiryDate(), POST_TIME_PATTERN, TIMEZONE_UTC) > currentTimeInMillis);
     }
 }

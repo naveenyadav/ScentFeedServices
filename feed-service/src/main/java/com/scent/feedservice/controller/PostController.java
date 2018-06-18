@@ -1,27 +1,19 @@
 package com.scent.feedservice.controller;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
 import com.scent.feedservice.data.feed.Post;
-import com.scent.feedservice.steps.CreatePostHandler;
-import com.scent.feedservice.steps.ListPost;
-import com.scent.feedservice.steps.UpVoteAction;
+import com.scent.feedservice.steps.poststeps.CreatePostStep;
+import com.scent.feedservice.steps.poststeps.ListPostStep;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-import static com.scent.feedservice.Util.Constants.*;
-import static com.scent.feedservice.Util.Constants.POST_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * This controller class file is used to handle following:
@@ -33,10 +25,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RestController
 @RequestMapping("/post")
 public class PostController extends BaseController {
+
+
     @Autowired
-    private ListPost likePost;
-    private CreatePostHandler createPostHandler;
-    public PostController(CreatePostHandler createPostHandler){
+    private ListPostStep likePost;
+    private CreatePostStep createPostHandler;
+    public PostController(CreatePostStep createPostHandler){
         this.createPostHandler = createPostHandler;
     }
 
@@ -48,21 +42,12 @@ public class PostController extends BaseController {
      * @param queryParams map of all request parameter name and its value
      * @return
      */
-    @RequestMapping(value = "/createPost", method = GET, produces = APPLICATION_JSON_VALUE)
-    public String getMono(@RequestParam Map<String, String> queryParams) {
-        queryParams.put(CONTENT, "content");
-        queryParams.put(TIMEZONE, "IST");
-        queryParams.put(LOCATION_NAME, "Taj Mahal");
-
-        queryParams.put(POST_TYPE, "IMAGE");
-        //queryParams.put(USER_ID, "6");
+    @RequestMapping(value = "/createPost", method = POST, produces = APPLICATION_JSON_VALUE)
+    public String getMono(@RequestBody Map<String, String> queryParams) {
         EventData eventData = new EventData();
-
         RequestData requestData = getRequestData(queryParams);
-
         eventData.setRequestData(requestData);
         createPostHandler.perFormAction(eventData);
-
         return "Success";
     }
 

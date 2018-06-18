@@ -2,7 +2,7 @@ package com.scent.feedservice.controller;
 
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
-import com.scent.feedservice.steps.UpVoteAction;
+import com.scent.feedservice.steps.poststeps.UpVoteStep;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
-
-import static com.scent.feedservice.Util.Constants.*;
 
 /**
  * This controller class file is used to handle following:
@@ -24,8 +22,8 @@ import static com.scent.feedservice.Util.Constants.*;
 @RequestMapping("/comment")
 public class CommentController {
 
-    private UpVoteAction upVoteAction;
-    public CommentController(UpVoteAction upVoteAction){
+    private UpVoteStep upVoteAction;
+    public CommentController(UpVoteStep upVoteAction){
         this.upVoteAction = upVoteAction;
     }
     /**

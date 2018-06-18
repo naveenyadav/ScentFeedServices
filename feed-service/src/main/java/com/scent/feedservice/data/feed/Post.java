@@ -22,9 +22,11 @@ public class Post {
    private PrivacyType privacy;
    private Boolean isLocationHidden;
    private PostType postType;
-   private Boolean flagToDelete;
+   private StatusType flagToDelete;
    private Double[] location;
    private String locationName;
+
+   private String mediaFormat;
 
    public Post() {
       location = new Double[2];
@@ -96,11 +98,11 @@ public class Post {
       this.postType = postType;
    }
 
-   public Boolean getFlagToDelete() {
+   public StatusType getFlagToDelete() {
       return flagToDelete;
    }
 
-   public void setFlagToDelete(Boolean flagToDelete) {
+   public void setFlagToDelete(StatusType flagToDelete) {
       this.flagToDelete = flagToDelete;
    }
 
@@ -134,6 +136,14 @@ public class Post {
 
    public void setExpiryDate(Date expiryDate) {
       this.expiryDate = expiryDate;
+   }
+
+   public String getMediaFormat() {
+      return mediaFormat;
+   }
+
+   public void setMediaFormat(String mediaFormat) {
+      this.mediaFormat = mediaFormat;
    }
 
    @Override

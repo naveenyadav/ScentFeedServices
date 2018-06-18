@@ -12,9 +12,12 @@ import java.util.Set;
 public class Like {
     @Id
     private String userId;
-    private Set<String> posts;
+    private Set<String> upVotePosts;
+    private Set<String> downVotePosts;
     public Like(){
-        posts = new HashSet<>();
+        upVotePosts = new HashSet<>();
+        downVotePosts = new HashSet<>();
+
     }
 
     public String getUserId() {
@@ -25,22 +28,36 @@ public class Like {
         this.userId = userId;
     }
 
-    public Set<String> getPosts() {
-        return posts;
+    public Set<String> getUpVotePosts() {
+        return upVotePosts;
     }
 
-    public void setPosts(Set<String> posts) {
-        this.posts = posts;
+    public void setUpVotePosts(Set<String> upVotePosts) {
+        this.upVotePosts = upVotePosts;
     }
-    public boolean addPosts(String postId){
-       return this.posts.add(postId);
+
+    public Set<String> getDownVotePosts() {
+        return downVotePosts;
+    }
+
+    public void setDownVotePosts(Set<String> downVotePosts) {
+        this.downVotePosts = downVotePosts;
+    }
+
+    public boolean addPosts(String postId, boolean upVoted){
+        if(upVoted) {
+            return this.upVotePosts.add(postId);
+        }else{
+            return this.downVotePosts.add(postId);
+        }
     }
 
     @Override
     public String toString() {
         return "Like{" +
                 "userId='" + userId + '\'' +
-                ", posts=" + posts +
+                ", upVotePosts=" + upVotePosts +
+                ", downVotePosts=" + downVotePosts +
                 '}';
     }
 }
