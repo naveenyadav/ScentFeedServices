@@ -1,7 +1,5 @@
 package com.scent.feedservice.steps.poststeps;
 
-import com.scent.feedservice.Util.CommonUtil;
-import com.scent.feedservice.Util.ConfigServiceImpl;
 import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
@@ -10,8 +8,6 @@ import com.scent.feedservice.data.feed.Post;
 import com.scent.feedservice.repositories.LikeRepository;
 import com.scent.feedservice.repositories.PostRepository;
 import com.scent.feedservice.steps.IAction;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -30,8 +26,6 @@ import static com.scent.feedservice.Util.Constants.*;
 public class UpVoteStep implements IAction {
     private Logger LOG = Loggers.getLogger(UpVoteStep.class);
 
-    @Autowired
-    protected ConfigServiceImpl configServiceImpl;
 
     private LikeRepository likeRepository;
 
@@ -49,99 +43,85 @@ public class UpVoteStep implements IAction {
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
 
         //Get Year also
-        String year = paramMap.get(YEAR);
         String userId = paramMap.get(USER_ID);
-        String likeUserId = year.concat(UNDER_SCORE).concat(userId);
         String postId =  paramMap.get(POST_ID);
 
         //Get like by UserID
-        Mono<Long> likeMono = likeRepository.countLikesByUserId(likeUserId)
+        Mono<Long> likeMono = likeRepository.countLikesByUserId(userId)
                 .single().tag("GetLike", "getLike").log(LOG, Level.INFO, true, SignalType.CURRENT_CONTEXT);
 
         //Get Post By postId
-        Mono<Post> postMono = postRepository.getPostByPostId(postId).tag("GetPost", "getPost")
-                .flatMap(post -> processPost(post, userId)).tag("UpVote", "upVote").log(LOG, Level.INFO, true, SignalType.CURRENT_CONTEXT);
+        Mono<Post> postMono = postRepository.getPostByPostId(postId);
 
-        likeMono.zipWith(postMono).log().subscribe(tuple -> onSuccess(tuple,  paramMap));
-        //Save like
-        //update post
+        likeMono.zipWith(postMono).flatMap(tuple -> onSuccess(tuple, paramMap)).subscribe();
     }
 
 
-    public void onSuccess(Tuple2<Long, Post> tuple, Map<String, String> paramMap){
-
-        Long likeCout = tuple.getT1();
-
+    private Mono<Tuple2<Like, Post>> onSuccess(Tuple2<Long, Post> tuple, Map<String, String> paramMap){
+        Long likeCount = tuple.getT1();
         Post post = tuple.getT2();
-        String year = paramMap.get(YEAR);
         String userId = paramMap.get(USER_ID);
-        String likeUserId = year.concat(UNDER_SCORE).concat(userId);
         String postId = paramMap.get(POST_ID);
+        String vote = paramMap.get(VOTE);
         Mono<Like> likeMono = Mono.empty();
-        if(likeCout == 0 && post != null) {
+        paramMap.put(PARAM_VOTE, String.valueOf(ZERO));
+        boolean result = !post.getUserId().equals(userId);
+        if(likeCount == 0 && post != null && result) {
+            //Like for the user like row is not created
             Like like = new Like();
-            like.setUserId(likeUserId);
-            like.addPosts(postId, Boolean.TRUE);
+            like.setUserId(userId);
+            if(vote.equals(UP_VOTE)) {
+                paramMap.put(PARAM_VOTE, String.valueOf(ONE));
+                like.addUpVotes(postId);
+            }else{
+                paramMap.put(PARAM_VOTE, String.valueOf(MINUS_ONE));
+                like.addDownVotes(postId);
+            }
             //Save like
             likeMono = likeRepository.save(like);
-        }else if(likeCout == 1 && null != post){
+
+        }else if(likeCount == 1 && null != post && result){
             //only add postId in like database
-            likeMono = likeRepository.getLikeByUserId(likeUserId).flatMap( like -> {
-                if(like.addPosts(postId, Boolean.TRUE)) {
-                    return likeRepository.save(like);
+            likeMono = likeRepository.getLikeByUserId(userId).flatMap( like -> {
+                if(vote.equals(UP_VOTE)) {
+                    if (like.removeDownVotes(postId)) {
+                        //Already downVoted Now wants to upVote
+                        paramMap.put(PARAM_VOTE, String.valueOf(TWO));
+                    } else {
+                        //first time upVoting the post
+                        paramMap.put(PARAM_VOTE, String.valueOf(ONE));
+                    }
+                    like.addUpVotes(postId);
+                }else if(vote.equals(DOWN_VOTE)){
+                    if(like.removeUpVotes(postId)){
+                        //Already upVoted Now wants to downVote
+                        paramMap.put(PARAM_VOTE, String.valueOf(MINUS_TWO));
+                    }else{
+                        //first time downVoting the post
+                        paramMap.put(PARAM_VOTE, String.valueOf(MINUS_ONE));
+                    }
+                    like.addDownVotes(postId);
                 }
-                return Mono.empty();
+                return likeRepository.save(like);
             });
         }
-        likeMono.subscribe(like -> savePost(like, post));
-    }
-    private void savePost(Like like, Post post){
-
-        if(like != null)
-          postRepository.save(post).subscribe();
+        int counter = Integer.parseInt(paramMap.get(PARAM_VOTE));
+        post = processPost(post, counter, result);
+        Mono<Post> postMono = postRepository.save(post);
+        return likeMono.zipWith(postMono);
     }
 
-    public Mono<Post> processPost(Post post, String userId){
-        boolean result = !post.getUserId().equals(userId);
+    public Post processPost(Post post, int counter, Boolean result){
         if(result) {
-            // add one vote
-            post.setVotes(post.getVotes() + 1);
-
-            //Get post node expiry date
-            Date expiryDate = post.getExpiryDate();
-
-            //Get specified hour configured for various upvotes level
-            int upVoteHour = configServiceImpl.getPropertyValueAsInteger(GLOBAL_CONFIG, upVoteIncrement(post));
+            // add vote
+            post.setVotes(post.getVotes() + counter);
 
             //Add the upVote hour to expiry date
-            Date updatedDate = DateUtil.updateHourToExpiryDate(expiryDate, upVoteHour, TIMEZONE_UTC);
+            Date updatedDate = DateUtil.updateHourToExpiryDate(post.getExpiryDate(), counter, TIMEZONE_UTC);
 
             //now change the expiry date
             post.setExpiryDate(updatedDate);
-            return Mono.just(post);
-        }else{
-            return Mono.empty();
         }
-    }
-
-
-    public void onSavingSucceess(Post post, EventData eventData){
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data", post);
-        updateResponse("UpVote", eventData, jsonObject);
-    }
-
-    public void onError(Throwable throwable, EventData eventData){
-        JSONObject jsonObject = CommonUtil.getErrorResponse(throwable.toString(), EMPTY, true);
-        updateResponse("UpVote", eventData, jsonObject);
-    }
-
-    private String upVoteIncrement(Post post){
-        if(post.getVotes() >= 2000)
-            return PROP_POST_HOUR_UP_VOTE_2000;
-        else if(post.getVotes() >= 1000 && post.getVotes() < 1000){
-            return PROP_POST_HOUR_UP_VOTE_1000;
-        }
-        return PROP_POST_HOUR_UP_VOTE;
+        return post;
     }
 }

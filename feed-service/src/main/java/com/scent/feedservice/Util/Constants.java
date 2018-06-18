@@ -95,4 +95,16 @@ public class Constants {
     public static final String DOT = ".";
     public static final String FORWARD_SLASH = "/";
 
+    public static final String VOTE = "vote";
+    public static final String UP_VOTE = "upVote";
+    public static final String DOWN_VOTE = "downVote";
+    public static final String PARAM_VOTE = "paramVote";
+    public static final int MINUS_ONE = -1;
+    public static final int MINUS_TWO = -2;
+    public static final int ONE = 1;
+    public static final int ZERO = 0;
+
+
+
+
 }

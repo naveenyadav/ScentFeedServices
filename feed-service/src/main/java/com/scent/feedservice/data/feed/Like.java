@@ -12,12 +12,12 @@ import java.util.Set;
 public class Like {
     @Id
     private String userId;
-    private Set<String> upVotePosts;
-    private Set<String> downVotePosts;
-    public Like(){
-        upVotePosts = new HashSet<>();
-        downVotePosts = new HashSet<>();
 
+    private Set<String> upVotes;
+    private Set<String> downVotes;
+    public Like(){
+        upVotes = new HashSet<>();
+        downVotes = new HashSet<>();
     }
 
     public String getUserId() {
@@ -28,36 +28,45 @@ public class Like {
         this.userId = userId;
     }
 
-    public Set<String> getUpVotePosts() {
-        return upVotePosts;
+
+    public Set<String> getUpVotes() {
+        return upVotes;
     }
 
-    public void setUpVotePosts(Set<String> upVotePosts) {
-        this.upVotePosts = upVotePosts;
+    public void setUpVotes(Set<String> upVotes) {
+        this.upVotes = upVotes;
     }
 
-    public Set<String> getDownVotePosts() {
-        return downVotePosts;
+    public Set<String> getDownVotes() {
+        return downVotes;
     }
 
-    public void setDownVotePosts(Set<String> downVotePosts) {
-        this.downVotePosts = downVotePosts;
+    public void setDownVotes(Set<String> downVotes) {
+        this.downVotes = downVotes;
     }
 
-    public boolean addPosts(String postId, boolean upVoted){
-        if(upVoted) {
-            return this.upVotePosts.add(postId);
-        }else{
-            return this.downVotePosts.add(postId);
-        }
+    public boolean addUpVotes(String postId){
+        return upVotes.add(postId);
+    }
+
+    public boolean removeUpVotes(String postId){
+        return upVotes.remove(postId);
+    }
+
+    public boolean addDownVotes(String postId){
+        return downVotes.add(postId);
+    }
+
+    public boolean removeDownVotes(String postId){
+        return downVotes.remove(postId);
     }
 
     @Override
     public String toString() {
         return "Like{" +
                 "userId='" + userId + '\'' +
-                ", upVotePosts=" + upVotePosts +
-                ", downVotePosts=" + downVotePosts +
+                ", upVotes=" + upVotes +
+                ", downVotes=" + downVotes +
                 '}';
     }
 }
