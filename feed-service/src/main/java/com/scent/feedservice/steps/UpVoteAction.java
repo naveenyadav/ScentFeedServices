@@ -27,8 +27,6 @@ import static com.scent.feedservice.Util.Constants.*;
 public class UpVoteAction implements IAction {
     private Logger LOG = Loggers.getLogger(UpVoteAction.class);
 
-    @Autowired
-    protected ConfigServiceImpl configServiceImpl;
 
     private LikeRepository likeRepository;
 
@@ -70,7 +68,7 @@ public class UpVoteAction implements IAction {
         paramMap.put(PARAM_VOTE, String.valueOf(ZERO));
         boolean result = !post.getUserId().equals(userId);
         if(likeCount == 0 && post != null && result) {
-            //Like for the user is not created
+            //Like for the user like row is not created
             Like like = new Like();
             like.setUserId(userId);
             if(vote.equals(UP_VOTE)) {
@@ -85,7 +83,7 @@ public class UpVoteAction implements IAction {
 
         }else if(likeCount == 1 && null != post && result){
             //only add postId in like database
-            likeMono = likeRepository.getLikeByUserId(likeUserId).flatMap( like -> {
+            likeMono = likeRepository.getLikeByUserId(userId).flatMap( like -> {
                 if(vote.equals(UP_VOTE)) {
                     if (like.removeDownVotes(postId)) {
                         //Already downVoted Now wants to upVote
@@ -116,7 +114,7 @@ public class UpVoteAction implements IAction {
 
     public Post processPost(Post post, int counter, Boolean result){
         if(result) {
-            // add one vote
+            // add vote
             post.setVotes(post.getVotes() + counter);
 
             //Add the upVote hour to expiry date

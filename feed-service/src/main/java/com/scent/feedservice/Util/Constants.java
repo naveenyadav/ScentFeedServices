@@ -76,7 +76,6 @@ public class Constants {
     public static final int MINUS_ONE = -1;
     public static final int MINUS_TWO = -2;
     public static final int ONE = 1;
-    public static final int TWO = 2;
     public static final int ZERO = 0;
 
 
