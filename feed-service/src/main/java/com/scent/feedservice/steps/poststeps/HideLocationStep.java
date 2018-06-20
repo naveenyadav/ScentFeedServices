@@ -3,7 +3,6 @@ package com.scent.feedservice.steps.poststeps;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
 import com.scent.feedservice.data.feed.Post;
-import com.scent.feedservice.data.feed.StatusType;
 import com.scent.feedservice.repositories.PostRepository;
 import com.scent.feedservice.steps.IAction;
 import org.springframework.stereotype.Component;

@@ -2,7 +2,6 @@ package com.scent.feedservice.steps;
 
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.ResponseData;
-import com.scent.feedservice.data.feed.IData;
 
 import java.util.HashMap;
 import java.util.Map;

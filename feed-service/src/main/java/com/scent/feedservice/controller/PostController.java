@@ -28,12 +28,9 @@ public class PostController extends BaseController {
 
 
     @Autowired
-    private ListPostStep likePost;
-    private CreatePostStep createPostHandler;
-    public PostController(CreatePostStep createPostHandler){
-        this.createPostHandler = createPostHandler;
-    }
-
+    private ListPostStep listPostStep;
+    @Autowired
+    private CreatePostStep createPostStep;
 
     /**
      * This GET controller method is used to handle following.
@@ -43,11 +40,9 @@ public class PostController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/createPost", method = POST, produces = APPLICATION_JSON_VALUE)
-    public String getMono(@RequestBody Map<String, String> queryParams) {
-        EventData eventData = new EventData();
-        RequestData requestData = getRequestData(queryParams);
-        eventData.setRequestData(requestData);
-        createPostHandler.perFormAction(eventData);
+    public String createPost(@RequestBody Map<String, String> queryParams) {
+        EventData eventData = gerEventData(queryParams);
+        createPostStep.perFormAction(eventData);
         return "Success";
     }
 
@@ -59,38 +54,42 @@ public class PostController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getPosts", method = GET, produces = APPLICATION_JSON_VALUE)
-    public Flux<Post> getFlux(@RequestParam Map<String, String> queryParams) {
-        EventData eventData = new EventData();
-        RequestData requestData = getRequestData(queryParams);
-
-        eventData.setRequestData(requestData);
-        return likePost.getPosts(eventData);
+    public Flux<Post> getPosts(@RequestParam Map<String, String> queryParams) {
+        EventData eventData = gerEventData(queryParams);
+        return listPostStep.getPosts(eventData);
 
     }
 
     @RequestMapping(value = "/changePrivacy", method = GET, produces = APPLICATION_JSON_VALUE)
     public void getEvents(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
+        EventData eventData = gerEventData(queryParams);
     }
 
     @RequestMapping(value = "/deletePost", method = GET, produces = APPLICATION_JSON_VALUE)
     public void deletePost(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
+        EventData eventData = gerEventData(queryParams);
     }
+
+    @RequestMapping(value = "/hideLocation", method = GET, produces = APPLICATION_JSON_VALUE)
+    public void hideLocation(@RequestParam Map<String, String> queryParams) {
+        EventData eventData = gerEventData(queryParams);
+    }
+
+
 
     @RequestMapping(value = "/sortByDsitance", method = GET, produces = APPLICATION_JSON_VALUE)
     public void sortByDistance(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
+        EventData eventData = gerEventData(queryParams);
     }
 
     @RequestMapping(value = "/sortByVotes", method = GET, produces = APPLICATION_JSON_VALUE)
     public void sortByVotes(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
+        EventData eventData = gerEventData(queryParams);
     }
 
     @RequestMapping(value = "/sortByTime", method = GET, produces = APPLICATION_JSON_VALUE)
     public void sortByTime(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
+        EventData eventData = gerEventData(queryParams);
     }
 
 }

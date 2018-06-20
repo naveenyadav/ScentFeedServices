@@ -62,7 +62,6 @@ public class ListPostStep implements IAction {
         q.addCriteria(new Criteria(FLAG_TO_DELETE).in(StatusType.POSTED));
         q.with(new Sort(Sort.Direction.ASC, EXPIRY_DATE));
         q.with(new Sort(Sort.Direction.ASC, UP_VOTES));
-        System.out.println(q.toString());
         return mongoOperations.find(q, Post.class);
     }
 }

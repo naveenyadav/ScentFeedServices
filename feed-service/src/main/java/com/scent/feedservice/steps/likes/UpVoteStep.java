@@ -1,4 +1,4 @@
-package com.scent.feedservice.steps.poststeps;
+package com.scent.feedservice.steps.likes;
 
 import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.EventData;
@@ -111,7 +111,7 @@ public class UpVoteStep implements IAction {
         return likeMono.zipWith(postMono);
     }
 
-    public Post processPost(Post post, int counter, Boolean result){
+    private Post processPost(Post post, int counter, Boolean result){
         if(result) {
             // add vote
             post.setVotes(post.getVotes() + counter);
