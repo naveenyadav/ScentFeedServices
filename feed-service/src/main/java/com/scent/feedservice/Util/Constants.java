@@ -104,6 +104,17 @@ public class Constants {
     public static final int ONE = 1;
     public static final int ZERO = 0;
 
+    //profile
+    public static final String EMAIL_ID = "email";
+    public static final String PASSWORD = "password";
+    public static final String MOBILE_NUIMBER = "mobile";
+    public static final String LOGIN_TYPE = "loginType";
+    public static final String SIGNUP_TYPE = "signupType";
+    public static final String LOGIN_BY_MOBILE = "LoginByMobile";
+    public static final String LOGIN_BY_EMAIL = "LoginByEmail";
+    public static final String FIRST_NAME = "firstName;"
+    public static final String LAST_NAME = "lastName;
+
 
 
 
