@@ -1,7 +1,8 @@
-package com.scent.feedservice.steps.poststeps;
+package com.scent.feedservice.steps.feed;
 
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
+import com.scent.feedservice.data.ResponseData;
 import com.scent.feedservice.data.feed.Post;
 import com.scent.feedservice.data.feed.StatusType;
 import com.scent.feedservice.repositories.PostRepository;
@@ -21,7 +22,7 @@ public class DeletePostStep implements IAction {
         this.postRepository = postRepository;
     }
 
-    public void perFormAction(EventData eventData){
+    public ResponseData perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
 
@@ -32,6 +33,8 @@ public class DeletePostStep implements IAction {
                     post.setFlagToDelete(StatusType.DELETE_PENDING);
                     return Mono.just(post);
                 }).subscribe(this::updatePost);
+
+        return eventData.getResponseData();
 
     }
 

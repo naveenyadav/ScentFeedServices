@@ -1,8 +1,9 @@
-package com.scent.feedservice.steps.poststeps;
+package com.scent.feedservice.steps.feed;
 
 import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
+import com.scent.feedservice.data.ResponseData;
 import com.scent.feedservice.data.feed.Post;
 import com.scent.feedservice.data.feed.StatusType;
 import com.scent.feedservice.steps.IAction;
@@ -24,7 +25,8 @@ public class ListPostStep implements IAction {
     public ListPostStep(ReactiveMongoOperations mongoOperations){
         this.mongoOperations = mongoOperations;
     }
-    public void perFormAction(EventData eventData){
+    public ResponseData perFormAction(EventData eventData){
+        return eventData.getResponseData();
 
 
     }

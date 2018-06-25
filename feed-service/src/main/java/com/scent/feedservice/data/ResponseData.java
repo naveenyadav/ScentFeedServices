@@ -2,11 +2,8 @@ package com.scent.feedservice.data;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.scent.feedservice.data.feed.IData;
-import org.reactivestreams.Publisher;
 
 import java.util.HashMap;
-import java.util.ListIterator;
 import java.util.Map;
 
 import static com.scent.feedservice.Util.Constants.JSON_RESPONSE_FILTER;
@@ -46,8 +43,10 @@ public class ResponseData {
         dataMap.put(name, value);
     }
 
-
-
-
-
+    @Override
+    public String toString() {
+        return "ResponseData{" +
+                "dataMap=" + dataMap +
+                '}';
+    }
 }

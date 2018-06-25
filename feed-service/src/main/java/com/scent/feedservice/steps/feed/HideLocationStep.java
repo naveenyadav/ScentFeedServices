@@ -1,7 +1,8 @@
-package com.scent.feedservice.steps.poststeps;
+package com.scent.feedservice.steps.feed;
 
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
+import com.scent.feedservice.data.ResponseData;
 import com.scent.feedservice.data.feed.Post;
 import com.scent.feedservice.repositories.PostRepository;
 import com.scent.feedservice.steps.IAction;
@@ -20,7 +21,7 @@ public class HideLocationStep implements IAction {
             this.postRepository = postRepository;
         }
 
-        public void perFormAction(EventData eventData) {
+        public ResponseData perFormAction(EventData eventData) {
             final RequestData requestData = eventData.getRequestData();
             Map<String, String> paramMap = getRequestParamsCopy(requestData.getDataMap());
 
@@ -30,6 +31,7 @@ public class HideLocationStep implements IAction {
                             post.setLocationHidden(!post.getLocationHidden());
                             return Mono.just(post);
                         }).subscribe(this::updatePost);
+            return eventData.getResponseData();
         }
 
         private void updatePost(Post post){

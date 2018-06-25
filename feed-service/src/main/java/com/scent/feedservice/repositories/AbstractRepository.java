@@ -2,9 +2,6 @@ package com.scent.feedservice.repositories;
 
 
 import com.scent.feedservice.Util.ConfigServiceImpl;
-import com.scent.feedservice.data.EventData;
-import com.scent.feedservice.data.ResponseData;
-import com.scent.feedservice.data.feed.IData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.UriTemplate;
 

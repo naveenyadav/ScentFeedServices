@@ -1,7 +1,8 @@
-package com.scent.feedservice.steps.poststeps;
+package com.scent.feedservice.steps.profile;
 
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
+import com.scent.feedservice.data.ResponseData;
 import com.scent.feedservice.data.feed.Post;
 import com.scent.feedservice.data.feed.PrivacyType;
 import com.scent.feedservice.repositories.PostRepository;
@@ -21,7 +22,7 @@ public class ChangePrivacyStep implements IAction {
     public ChangePrivacyStep(PostRepository postRepository){
         this.postRepository = postRepository;
     }
-    public void perFormAction(EventData eventData){
+    public ResponseData perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
 
@@ -33,6 +34,7 @@ public class ChangePrivacyStep implements IAction {
               post.setPrivacy(PrivacyType.valueOf(privacy));
               return Mono.just(post);
           }).subscribe(this::updatePost);
+        return eventData.getResponseData();
     }
 
     private void updatePost(Post post){

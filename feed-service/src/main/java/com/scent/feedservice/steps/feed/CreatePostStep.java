@@ -1,4 +1,4 @@
-package com.scent.feedservice.steps.poststeps;
+package com.scent.feedservice.steps.feed;
 
 
 import com.scent.feedservice.Util.ConfigServiceImpl;
@@ -46,11 +46,12 @@ public class CreatePostStep implements IAction {
 //        addToRequiredFieldList(requiredFields);
     }
 
-    public void perFormAction(EventData eventData){
+    public ResponseData perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
         Post post = getPostbody(paramMap);
         postRepository.save(post).subscribe();
+        return eventData.getResponseData();
     }
 
     private Post getPostbody(Map<String, String> paramMap){
@@ -77,7 +78,7 @@ public class CreatePostStep implements IAction {
         post.setCreatedDate(createdDate);
         //Set Expiry Date
         post.setExpiryDate(expiryDate);
-        //Set Location Name
+        //Set location Name
         post.setLocationName(paramMap.get(LOCATION_NAME));
         //Set Longitude and latitude
         Double loc[] =  new Double[]{Double.parseDouble(paramMap.get(LONGITUDE)), Double.parseDouble(paramMap.get(LATITUDE))};

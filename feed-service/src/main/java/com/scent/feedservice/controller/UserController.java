@@ -19,25 +19,25 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController extends BaseController {
 
-    @RequestMapping(value = "/closeAccount", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void closeAccount(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
-    }
-
-
-    @RequestMapping(value = "/getProfile", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void getProfile(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
-    }
-
-    @RequestMapping(value = "/changePassword", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void changePassword(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
-    }
-
-    @RequestMapping(value = "/updateProfile", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void updateProfile(@RequestParam Map<String, String> queryParams) {
-        queryParams.put("", "");
-    }
+//    @RequestMapping(value = "/closeAccount", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public void closeAccount(@RequestParam Map<String, String> queryParams) {
+//        queryParams.put("", "");
+//    }
+//
+//
+//    @RequestMapping(value = "/getProfile", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public void getProfile(@RequestParam Map<String, String> queryParams) {
+//        queryParams.put("", "");
+//    }
+//
+//    @RequestMapping(value = "/changePassword", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public void changePassword(@RequestParam Map<String, String> queryParams) {
+//        queryParams.put("", "");
+//    }
+//
+//    @RequestMapping(value = "/updateProfile", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public void updateProfile(@RequestParam Map<String, String> queryParams) {
+//        queryParams.put("", "");
+//    }
 
 }

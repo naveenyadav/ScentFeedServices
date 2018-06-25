@@ -2,6 +2,7 @@ package com.scent.feedservice.controller;
 
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
+import com.scent.feedservice.data.ResponseData;
 
 import java.util.Map;
 
@@ -18,10 +19,16 @@ public abstract class BaseController {
         return requestData;
     }
 
+    protected ResponseData getResponseData(){
+        ResponseData responseData = new ResponseData();
+        return responseData;
+    }
+
     protected EventData gerEventData(Map<String, String> queryParams){
         EventData eventData = new EventData();
         RequestData requestData = getRequestData(queryParams);
         eventData.setRequestData(requestData);
+        eventData.setResponseData(getResponseData());
         return eventData;
 
     }

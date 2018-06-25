@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface IAction {
 
-    void perFormAction(EventData eventData);
+    ResponseData perFormAction(EventData eventData);
 
     default Map<String, String> getRequestParamsCopy(Map<String, String> dataMap) {
         Map<String, String> paramsMap = new HashMap<>();
@@ -18,9 +18,9 @@ public interface IAction {
 
     default ResponseData updateResponse(String eventName, EventData eventData,
                                           Object data) {
-        // Set response data.
         ResponseData responseData = eventData.getResponseData();
         responseData.setData(eventName, data);
+        eventData.setResponseData(responseData);
         return responseData;
     }
 

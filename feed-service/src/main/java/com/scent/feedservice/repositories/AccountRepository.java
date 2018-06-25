@@ -8,6 +8,8 @@ import reactor.core.publisher.Mono;
 
 public interface AccountRepository extends ReactiveMongoRepository<Account, String> {
     Mono<Account> getAccountByEmailAndPassword(String email, String password);
+    Mono<Long> countAccountByEmail(String email);
+    Mono<Long> countAccountByMobileNumber(String mobile);
     Mono<Account> getAccountByMobileNumberAndPassword(String mobile, String password);
 
 }

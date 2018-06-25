@@ -3,7 +3,7 @@ package com.scent.feedservice.data.profile;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "Accounts")
 public class Account {
     @Id
     private String userId;

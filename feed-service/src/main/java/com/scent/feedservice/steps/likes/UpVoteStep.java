@@ -3,6 +3,7 @@ package com.scent.feedservice.steps.likes;
 import com.scent.feedservice.Util.DateUtil;
 import com.scent.feedservice.data.EventData;
 import com.scent.feedservice.data.RequestData;
+import com.scent.feedservice.data.ResponseData;
 import com.scent.feedservice.data.feed.Like;
 import com.scent.feedservice.data.feed.Post;
 import com.scent.feedservice.repositories.LikeRepository;
@@ -38,7 +39,7 @@ public class UpVoteStep implements IAction {
 
 
     @Override
-    public void perFormAction(EventData eventData){
+    public ResponseData perFormAction(EventData eventData){
         final RequestData requestData = eventData.getRequestData();
         Map<String, String> paramMap =  getRequestParamsCopy(requestData.getDataMap());
 
@@ -54,6 +55,7 @@ public class UpVoteStep implements IAction {
         Mono<Post> postMono = postRepository.getPostByPostId(postId);
 
         likeMono.zipWith(postMono).flatMap(tuple -> onSuccess(tuple, paramMap)).subscribe();
+        return eventData.getResponseData();
     }
 
 
