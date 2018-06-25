@@ -300,7 +300,6 @@ public class CommonUtil {
      */
     public static boolean isSuccessResponse(JSONObject jsonObject) {
         boolean isSuccessResponse = true;
-
         if (null == jsonObject) {
             isSuccessResponse = false;
         }else {

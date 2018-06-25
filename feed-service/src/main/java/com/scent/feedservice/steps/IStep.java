@@ -7,8 +7,8 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface IStep {
-    Mono<ServerResponse> executeStep(EventData eventData);
+public interface IStep<T> {
+    Mono<T> executeStep(EventData eventData);
     default Map<String, String> getRequestParamsCopy(Map<String, String> dataMap) {
         Map<String, String> paramsMap = new HashMap<>();
         paramsMap.putAll(dataMap);

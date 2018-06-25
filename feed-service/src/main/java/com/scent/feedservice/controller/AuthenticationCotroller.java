@@ -1,13 +1,10 @@
 package com.scent.feedservice.controller;
 
 import com.scent.feedservice.data.EventData;
-import com.scent.feedservice.data.ResponseData;
-import com.scent.feedservice.steps.profile.GetAccountStep;
-import com.scent.feedservice.steps.profile.SignUp;
+import com.scent.feedservice.handler.CreateAccountHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -23,7 +20,7 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthenticationCotroller extends BaseController {
     @Autowired
-    private GetAccountStep getAccountStep;
+    private CreateAccountHandler createAccountHandler;
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public void authLogin(@RequestBody Map<String, String> queryParams) {
         queryParams.put("", "");
@@ -36,9 +33,11 @@ public class AuthenticationCotroller extends BaseController {
     }
 
     @RequestMapping(value = "/signUp", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ServerResponse> authSignUp(@RequestBody Map<String, String> queryParams) {
+    public Mono<String> authSignUp(@RequestBody Map<String, String> queryParams) {
         EventData eventData = gerEventData(queryParams);
-        return getAccountStep.executeStep(eventData);
+        return createAccountHandler.getresult(eventData).flatMap(jsonObject -> {
+            return Mono.just(jsonObject.toString());
+        });
 
 
     }
