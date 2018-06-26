@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashSet;
 import java.util.Set;
-@Document(collection = "Report")
+@Document(collection = "Reports")
 public class Report {
     @Id
     private String userId;

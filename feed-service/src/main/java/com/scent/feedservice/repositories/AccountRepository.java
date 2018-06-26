@@ -11,5 +11,6 @@ public interface AccountRepository extends ReactiveMongoRepository<Account, Stri
     Mono<Long> countAccountByEmail(String email);
     Mono<Long> countAccountByMobileNumber(String mobile);
     Mono<Account> getAccountByMobileNumberAndPassword(String mobile, String password);
+    Mono<String> getAccountByEmailExists(String email);
 
 }
